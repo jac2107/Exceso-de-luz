@@ -25,6 +25,74 @@
         }
         .home-minimal.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
         .home-minimal:hover { background: rgba(255,248,235,0.95); box-shadow: 0 10px 24px rgba(0,0,0,0.18); }
+        /* ===== STATS CARDS - 3 COLS MÍNIMO (AGREGAR al <style>) ===== */
+.stats-cards {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 1.2rem !important;
+    margin-bottom: 2.5rem !important;
+}
+
+/* SOLO en pantallas MUY pequeñas baja a 2 columnas */
+@media (max-width: 450px) {
+    .stats-cards {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+    }
+}
+
+/* Móvil compacto */
+@media (max-width: 768px) {
+    .stat-card {
+        padding: 1.4rem 1rem !important;
+        min-height: 110px !important;
+    }
+    .stat-number {
+        font-size: 2rem !important;
+    }
+}
+
+/* Tarjetas optimizadas */
+.stat-card {
+    background: var(--bg-card) !important;
+    padding: 1.8rem 1.2rem !important;
+    border-radius: 16px !important;
+    border: 1px solid var(--border-color) !important;
+    text-align: center !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+}
+
+.stat-icon {
+    font-size: 2.2rem !important;
+    margin-bottom: 0.8rem !important;
+}
+
+.stat-number {
+    font-size: 2.5rem !important;
+    font-weight: 800 !important;
+    color: var(--primary-color) !important;
+    margin-bottom: 0.6rem !important;
+    line-height: 1 !important;
+}
+
+.stat-label {
+    font-size: 0.95rem !important;
+    color: var(--text-secondary) !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+}
+
+/* Hover */
+.stat-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 12px 28px rgba(93, 64, 55, 0.15) !important;
+}
+
 </style>
 </head>
 
