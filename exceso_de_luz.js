@@ -343,9 +343,8 @@ function crearGraficoProgreso(stats) {
             <div class="chart-bar">
                 <div class="chart-label">${cat.nombre}</div>
                 <div class="chart-progress">
-                    <div class="chart-fill" style="width: ${porcentaje}%">
-                        ${cat.valor}/${cat.total}
-                    </div>
+                    <div class="chart-fill" style="width: ${porcentaje}%"></div>
+                    <div class="chart-numbers">${cat.valor}/${cat.total}</div>
                 </div>
             </div>
         `;

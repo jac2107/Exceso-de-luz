@@ -779,43 +779,105 @@ body {
     gap: 1rem;
 }
 
+/* ══════════════════════════════════════════════════════
+   GRÁFICO DE PROGRESO - NÚMEROS SIEMPRE VISIBLES
+   ══════════════════════════════════════════════════════ */
+
 .chart-bar {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .chart-label {
-    min-width: 120px;
-    font-weight: 500;
+    font-size: 1rem;
+    font-weight: 600;
     color: var(--text-primary);
-    font-size: clamp(0.85rem, 2vw, 1rem);
+    margin-bottom: 0.5rem;
 }
 
 .chart-progress {
-    flex: 1;
-    height: 32px;
-    background: var(--bg-main);
-    border-radius: 16px;
-    overflow: hidden;
     position: relative;
+    height: 40px;
+    background: var(--bg-main);
+    border-radius: 10px;
+    overflow: visible; /* ✅ Cambiado de hidden a visible */
     border: 1px solid var(--border-color);
 }
 
 .chart-fill {
     height: 100%;
-    background: var(--primary-color);
-    border-radius: 16px;
+    background: linear-gradient(135deg, 
+        var(--primary-color) 0%, 
+        var(--color-marron) 100%);
+    border-radius: 10px;
     transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 12px;
-    color: var(--color-blanco);
-    font-weight: 600;
-    font-size: clamp(0.8rem, 2vw, 0.9rem);
+    box-shadow: inset 0 1px 3px rgba(255,255,255,0.2);
 }
 
+/* ✅ NÚMEROS SIEMPRE VISIBLES */
+.chart-numbers {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    background: rgba(255,255,255,0.95);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    border: 1.5px solid var(--border-color);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Animación de entrada */
+.chart-fill {
+    animation: fillAnimation 0.8s ease-out;
+}
+
+@keyframes fillAnimation {
+    from {
+        width: 0 !important;
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .chart-progress {
+        height: 36px;
+    }
+    
+    .chart-numbers {
+        font-size: 0.85rem;
+        padding: 0.25rem 0.7rem;
+        right: 8px;
+    }
+    
+    .chart-label {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .chart-progress {
+        height: 32px;
+    }
+    
+    .chart-numbers {
+        font-size: 0.8rem;
+        padding: 0.2rem 0.6rem;
+        right: 6px;
+    }
+    
+    .chart-label {
+        font-size: 0.9rem;
+    }
+}
 /* Progress List */
 .progress-list {
     background: var(--bg-card);
