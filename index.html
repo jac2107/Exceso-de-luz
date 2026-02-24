@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exceso de Luz</title>
+    <link rel="stylesheet" href="exceso_de_luz.css">
+</head>
+<body>
+
+<!-- ══════════ INTRO ══════════ -->
+<div id="intro" style="
+    position:fixed; inset:0; z-index:9999;
+    background:#3E2723;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+">
+    <!-- paso 1 -->
+    <div id="p1" style="display:none; flex-direction:column; align-items:center; text-align:center; color:#FAFAFA;">
+        <div style="font-size:clamp(3rem,12vw,8rem); font-weight:900; letter-spacing:0.08em;">ALTOOO</div>
+<img 
+  id="emoji-mano"
+  src="imagenes\stop.jpg"
+  alt="Mano alto"
+  style="
+    width:clamp(120px,20vw,260px);
+    margin-top:1rem;
+  "
+>
+    </div>
+    <!-- paso 2 -->
+    <div id="p2" style="display:none; flex-direction:column; align-items:center; text-align:center; color:#FAFAFA;">
+    <div style="font-size:clamp(3rem,12vw,8rem); font-weight:900; letter-spacing:0.08em;">TÚ</div>
+    <img 
+        id="emoji-dedo"
+        src="imagenes\tu.jpg"
+        alt="Tú"
+        style="width:clamp(140px,22vw,300px); margin-top:1rem;"
+    >
+</div>
+
+    <!-- paso 3 -->
+    <div id="p3" style="display:none; flex-direction:column; align-items:center; text-align:center; color:#FAFAFA; padding:1.5rem;">
+    
+    <div style="font-size:clamp(1.8rem,5vw,3.5rem); font-weight:300; margin-bottom:0.5rem;">
+        Tienes
+    </div>
+
+    <!-- TEXTO UN POCO MÁS ARRIBA -->
+    <div 
+        id="titulo-luz"
+        style="
+            font-size:clamp(2rem,7vw,5.5rem);
+            font-weight:900;
+            color:#D7CCC8;
+            letter-spacing:0.03em;
+            margin-bottom:1rem;
+            transform: translateY(-12px);
+        "
+    >
+        EXCESO DE LUZ
+    </div>
+
+    <!-- IMAGEN DEBAJO -->
+    <img 
+        id="imagen-luz"
+        src="imagenes\luz.webp"
+        alt="Exceso de Luz"
+        style="
+            width:clamp(220px,60vw,520px);
+        "
+    >
+
+</div>
+
+
+    <button onclick="saltarIntro()" style="
+        position:absolute; bottom:1.5rem; right:1.5rem;
+        padding:0.6rem 1.4rem;
+        background:rgba(255,255,255,0.15);
+        color:#fff; border:1.5px solid rgba(255,255,255,0.4);
+        border-radius:20px; cursor:pointer;
+        font-size:1rem; font-weight:600;
+    ">Saltar ►</button>
+</div>
+
+<!-- ══════════ HEADER ══════════ -->
+<header class="header-hero">
+    <div class="header-overlay"></div>
+
+    <div class="container header-content">
+        <h1 class="header-title">Exceso de Luz</h1>
+
+        <p class="header-description">
+     En un mundo que ama la oscuridad,
+    la luz siempre incomoda porque expone la verdad,
+    ademas la <strong>luz</strong>  no fue hecha para mezclarse con la oscuridad, sino fue hecha para vencerla.
+    <br><strong>Y TÚ no naciste para esconderte.</strong> 
+    <br><strong>Asi que no apagues la luz que Dios puso en ti.</strong>
+</p>
+
+        <blockquote class="header-verse">
+            “Ustedes son la luz del mundo"
+            <span>— Mateo 5:14 NVI</span>
+        </blockquote>
+    </div>
+</header>
+
+
+<!-- ══════════ MAIN ══════════ -->
+<main class="main-container">
+    <div class="container">
+        <div class="welcome-hero">
+            <h2>Bienvenido a Exceso de Luz</h2>
+            <p>Aqui encontrarás recursos espirituales para fortalecer tu fe y crecer en tu camino con Dios.</p>
+        </div>
+
+        <div class="categories-grid">
+            <a href="libros.html" class="category-card">
+                <div class="category-icon">📚</div>
+                <h3>Libros</h3>
+                <p>Lecturas recomendadas para crecer en la fe</p>
+                <span class="arrow">→</span>
+            </a>
+            <a href="devocionales.html" class="category-card">
+                <div class="category-icon">📖</div>
+                <h3>Planes/Devocionales</h3>
+                <p>Reflexiones diarias para nutrir tu espíritu</p>
+                <span class="arrow">→</span>
+            </a>
+            <a href="aplicaciones.html" class="category-card">
+                <div class="category-icon">📱</div>
+                <h3>Aplicaciones</h3>
+                <p>Herramientas digitales para tu vida cristiana</p>
+                <span class="arrow">→</span>
+            </a>
+            <a href="musica.html" class="category-card">
+                <div class="category-icon">🎵</div>
+                <h3>Música Cristiana</h3>
+                <p>Alabanzas y adoración para tu día</p>
+                <span class="arrow">→</span>
+            </a>
+            <a href="fondos.html" class="category-card">
+                <div class="category-icon">🖼️</div>
+                <h3>Fondos de Pantalla</h3>
+                <p>Imágenes inspiradoras con versículos</p>
+                <span class="arrow">→</span>
+            </a>
+            <a href="mensajeria.html" class="category-card">
+                <div class="category-icon">💬</div>
+                <h3>Recomendaciones</h3>
+                <p>Mandamos tus comentarios</p>
+                <span class="arrow">→</span>
+            </a>
+            <a href="progreso.html" class="category-card highlight">
+                <div class="category-icon">📊</div>
+                <h3>Mi Progreso</h3>
+                <p>Visualiza tu crecimiento espiritual</p>
+                <span class="arrow">→</span>
+            </a>
+        </div>
+
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2026 Exceso de Luz</p>
+        <p class="verse">"Ustedes son la luz del mundo" — Mateo 5:14 NVI</p>
+    </div>
+</footer>
+
+<!-- ══════════ SCRIPT INLINE ANIMACIÓN ══════════ -->
+<script>
+// Limpia sesión anterior de pruebas (quitar esta línea en producción)
+// sessionStorage.removeItem('intro_visto');
+
+function saltarIntro() {
+    var intro = document.getElementById('intro');
+    intro.style.transition = 'opacity 0.5s';
+    intro.style.opacity = '0';
+    setTimeout(function(){ intro.style.display = 'none'; }, 500);
+    sessionStorage.setItem('intro_visto','1');
+}
+
+(function(){
+    // Si ya se vio, ocultar inmediatamente
+    if (sessionStorage.getItem('intro_visto')) {
+        document.getElementById('intro').style.display = 'none';
+        return;
+    }
+
+    var p1 = document.getElementById('p1');
+    var p2 = document.getElementById('p2');
+    var p3 = document.getElementById('p3');
+    var mano = document.getElementById('emoji-mano');
+    var dedo = document.getElementById('emoji-dedo');
+    var luz  = document.getElementById('titulo-luz');
+
+    // Animaciones CSS inline para los emojis
+    var styleTag = document.createElement('style');
+    styleTag.textContent = [
+        '@keyframes temblar { 0%,100%{transform:rotate(-12deg)} 50%{transform:rotate(12deg)} }',
+        '@keyframes apuntar { 0%,100%{transform:translateY(0)} 50%{transform:translateY(18px)} }',
+        '@keyframes brillar { 0%{color:#D7CCC8} 50%{color:#fff;text-shadow:0 0 25px rgba(255,255,255,0.7)} 100%{color:#D7CCC8} }',
+        '@keyframes aparecer { from{opacity:0;transform:scale(0.6)} to{opacity:1;transform:scale(1)} }',
+        '@keyframes desaparecer { from{opacity:1;transform:scale(1)} to{opacity:0;transform:scale(1.15)} }',
+    ].join('');
+    document.head.appendChild(styleTag);
+
+    function show(el) {
+        el.style.display = 'flex';
+        el.style.animation = 'aparecer 0.5s ease forwards';
+    }
+    function hide(el, cb) {
+        el.style.animation = 'desaparecer 0.4s ease forwards';
+        setTimeout(function(){
+            el.style.display = 'none';
+            el.style.animation = '';
+            if (cb) cb();
+        }, 400);
+    }
+
+    // ── Paso 1: ALTOOO ✋
+    setTimeout(function(){
+        show(p1);
+        mano.style.animation = 'temblar 0.5s ease-in-out infinite';
+    }, 300);
+
+    // ── Paso 2: TÚ 👇
+    setTimeout(function(){
+        hide(p1, function(){
+            show(p2);
+            dedo.style.animation = 'apuntar 0.7s ease-in-out infinite';
+        });
+    }, 2500);
+
+    // ── Paso 3: EXCESO DE LUZ
+    setTimeout(function(){
+        hide(p2, function(){
+            show(p3);
+            luz.style.animation = 'brillar 1.5s ease-in-out infinite';
+        });
+    }, 5000);
+
+    // ── Fin: fade out
+    setTimeout(function(){
+        var intro = document.getElementById('intro');
+        intro.style.transition = 'opacity 0.7s';
+        intro.style.opacity = '0';
+        setTimeout(function(){
+            intro.style.display = 'none';
+            sessionStorage.setItem('intro_visto','1');
+        }, 700);
+    }, 8000);
+})();
+</script>
+
+<script src="exceso_de_luz.js"></script>
+
+</body>
+</html>

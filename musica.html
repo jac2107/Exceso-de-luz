@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Música Cristiana - Exceso de Luz</title>
+    <link rel="stylesheet" href="exceso_de_luz.css">
+    
+    <style>
+        .home-minimal {
+            position: fixed;
+            top: 18px; left: 18px;
+            font-size: 0.85rem; font-weight: 500;
+            color: rgba(0,0,0,0.85);
+            text-decoration: none;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(6px);
+            padding: 8px 14px;
+            border-radius: 999px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+            opacity: 0; pointer-events: none;
+            transform: translateY(-6px);
+            transition: opacity .25s ease, transform .25s ease, box-shadow .25s ease;
+            z-index: 999;
+        }
+        .home-minimal.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+        .home-minimal:hover { background: rgba(255,248,235,0.95); box-shadow: 0 10px 24px rgba(0,0,0,0.18); }
+        /* === stats mini overlay para cada canción === */
+.music-stats{
+   position: absolute;
+  top: 12px;
+  right: 288px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  background: #d7ccc8;
+  padding: 4px 8px;
+  border-radius: 15px;
+
+  font-size: 20px;
+  z-index: 30;
+}
+.stat-item{   
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: transparent !important; }
+.stat-item i{   font-size: 20px;   /* tamaño del icono */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+   border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+.stat-number{ font-weight:700; font-size:12px; color:#111; }
+
+/* Ajustes responsivos: reducir tamaño en móvil */
+@media (max-width:640px){
+  .music-stats { font-size:11px; padding:3px 6px; top:6px; right:6px; }
+  .music-stats .stat-item i { font-size:12px; }
+}
+.grid-btn.active {
+    border-color: #f2f2f2;
+    box-shadow: 0 0 10px #8d8d8d40;
+}
+/* ══════ SELECTOR DE ORDENAMIENTO ══════ */
+.sort-select {
+    padding: 0.5rem 2.5rem 0.5rem 0.8rem;
+    background: var(--bg-main);
+    border: 1.5px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+}
+
+.sort-select:hover {
+    border-color: var(--primary-color);
+}
+
+.sort-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(93, 64, 55, 0.1);
+}
+        .music-controls {
+                padding: 1.2rem;  /* Reducido de clamp(1.5rem, 3vw, 2rem) */
+
+    background: var(--bg-card); padding: clamp(1.5rem, 3vw, 2rem);
+    position: sticky;
+    top: 0px;
+    z-index: 100;
+        }
+        .search-box { position: relative; margin-bottom: 1.5rem; }
+        .search-box input {
+            width: 100%; padding: 0.9rem 3rem 0.9rem 1.2rem;
+            border: 1.5px solid var(--border-color); border-radius: 10px;
+            font-size: 1rem; background: var(--bg-main);
+            transition: all 0.3s ease;
+        }
+        .search-box input:focus {
+            outline: none; border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(93, 64, 55, 0.1);
+        }
+        .search-box::after {
+            content: '🔍'; position: absolute; right: 1rem; top: 50%;
+            transform: translateY(-50%); font-size: 1.2rem; opacity: 0.5;
+        }
+
+        /* ══════ FILTROS MEJORADOS ══════ */
+        .filter-section {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .filter-dropdown {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-btn-toggle {
+            width: 100%;
+            padding: 0.8rem 3rem 0.8rem 1rem;
+            background: var(--bg-main);
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            position: relative;
+        }
+
+        .filter-btn-toggle:hover {
+            border-color: var(--primary-color);
+        }
+
+        .filter-btn-toggle.active {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(93, 64, 55, 0.1);
+        }
+
+        .filter-btn-toggle::after {
+            content: '▼';
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.7rem;
+            transition: transform 0.3s ease;
+        }
+
+        .filter-btn-toggle.active::after {
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        .filter-menu {
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            max-height: 280px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+
+        .filter-menu.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .filter-option {
+            padding: 0.7rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .filter-option:last-child {
+            border-bottom: none;
+        }
+
+        .filter-option:hover {
+            background: var(--color-beige);
+        }
+
+        .filter-option.selected {
+            background: linear-gradient(135deg, 
+                rgba(215, 204, 200, 0.3) 0%, 
+                rgba(239, 235, 233, 0.2) 100%);
+            font-weight: 600;
+        }
+
+        .filter-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        .filter-option label {
+            cursor: pointer;
+            flex: 1;
+            user-select: none;
+        }
+
+        /* Chips de filtros activos */
+        .active-filters {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+            min-height: 24px;
+        }
+
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.8rem;
+            background: var(--primary-color);
+            color: var(--color-blanco);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            animation: chipIn 0.3s ease;
+        }
+
+        @keyframes chipIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .filter-chip-close {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+
+        .filter-chip-close:hover {
+            background: rgba(255,255,255,0.5);
+            transform: scale(1.1);
+        }
+
+        /* ══════ SELECTOR DE GRID ══════ */
+        .grid-selector {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            background: var(--bg-main);
+            padding: 0.4rem;
+            border-radius: 10px;
+            border: 1.5px solid var(--border-color);
+        }
+
+        .grid-btn {
+            width: 38px;
+            height: 38px;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .grid-btn:hover {
+            background: var(--color-beige);
+            color: var(--text-primary);
+        }
+
+        .grid-btn.active {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 700;
+        }
+
+        .results-count { color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem; }
+        
+        /* ══════ TARJETAS DE MÚSICA - DISEÑO VINILO ══════ */
+        .song-card {
+            background: var(--bg-card); 
+            border: 1px solid var(--border-color);
+            border-radius: 16px; 
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        .song-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(93, 64, 55, 0.25);
+            border-color: var(--primary-color);
+        }
+
+        /* Contenedor vinilo circular */
+        .song-cover-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 100%; /* Cuadrado perfecto */
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            overflow: hidden;
+        }
+
+        /* Disco vinilo (círculo negro con anillos) */
+        .song-cover-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 88%;
+            height: 88%;
+            background: 
+                radial-gradient(circle at center, transparent 0%, transparent 33%, rgba(255,255,255,0.03) 33%, rgba(255,255,255,0.03) 34%, transparent 34%),
+                radial-gradient(circle at center, transparent 0%, transparent 44%, rgba(255,255,255,0.02) 44%, rgba(255,255,255,0.02) 45%, transparent 45%),
+                radial-gradient(circle at center, #1a1a1a 0%, #2d2d2d 100%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            box-shadow: inset 0 0 25px rgba(0,0,0,0.5), 0 4px 15px rgba(0,0,0,0.4);
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Portada circular en el centro del disco */
+        .song-cover {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 58%; /* Tamaño de la etiqueta del vinilo */
+            height: 58%;
+            transform: translate(-50%, -50%);
+            object-fit: cover; /* Llena todo el círculo */
+            border-radius: 50%;
+            z-index: 2;
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.4);
+            transition: all 0.4s ease;
+        }
+
+        /* Agujero del centro del vinilo */
+        .song-cover-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 12%;
+            height: 12%;
+            background: radial-gradient(circle, #0a0a0a 0%, #1a1a1a 100%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            box-shadow: 
+                0 0 0 1px rgba(255,255,255,0.1),
+                inset 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        /* Animación de rotación al hover */
+        .song-card:hover .song-cover-wrapper::before {
+            transform: translate(-50%, -50%) rotate(360deg);
+        }
+
+        .song-card:hover .song-cover {
+            transform: translate(-50%, -50%) rotate(360deg) scale(1.3);
+        }
+
+        /* Brillo sutil en el vinilo */
+        .song-cover-wrapper {
+            background: 
+                radial-gradient(ellipse 150% 100% at 30% 40%, rgba(255,255,255,0.08) 0%, transparent 50%),
+                linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+        }
+
+        .song-info { 
+            padding: 1.3rem; 
+            background: var(--bg-card);
+            position: relative;
+        }
+        
+        .song-title {
+            font-size: 1.05rem; 
+            font-weight: 700; 
+            color: var(--text-primary);
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 0.5em;
+        }
+        
+        .song-artist { 
+            font-size: 0.88rem; 
+            color: var(--text-secondary); 
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .song-genre {
+            display: inline-block; 
+            font-size: 0.7rem; 
+            padding: 0.35rem 0.8rem;
+            background: linear-gradient(135deg, var(--color-marron-claro), var(--color-marron));
+            color: var(--color-blanco);
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .song-actions { 
+            display: flex; 
+            gap: 0.6rem; 
+        }
+        
+        .song-btn {
+            flex: 1; 
+            padding: 0.7rem 0.5rem; 
+            border: none; 
+            border-radius: 10px;
+            font-size: 0.8rem; 
+            font-weight: 700; 
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            text-align: center; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .song-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+
+        .song-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .song-btn span {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .btn-youtube { 
+            background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
+            color: white; 
+            box-shadow: 0 2px 8px rgba(255, 0, 0, 0.3);
+        }
+        
+        .btn-youtube:hover { 
+            background: linear-gradient(135deg, #CC0000 0%, #990000 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4);
+        }
+        
+        .btn-spotify { 
+            background: linear-gradient(135deg, #1DB954 0%, #1AA34A 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(29, 185, 84, 0.3);
+        }
+        
+        .btn-spotify:hover { 
+            background: linear-gradient(135deg, #1AA34A 0%, #168F3E 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(29, 185, 84, 0.4);
+        }
+
+        /* ══════ CHECKBOX Y ESTADO COMPLETADO ══════ */
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1.2rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--success-color);
+            border-radius: 4px;
+        }
+
+        .checkbox-wrapper label {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            user-select: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .checkbox-wrapper input:checked + label {
+            color: var(--success-color);
+            font-weight: 600;
+        }
+
+        /* Badge de completado */
+        .completed-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6D4C41 0%, #4E342E 100%);
+            color: var(--color-blanco);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.3rem;
+            z-index: 4;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            animation: badgePop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: 3px solid rgba(255,255,255,0.2);
+        }
+
+        @keyframes badgePop {
+            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+            50% { transform: scale(1.3) rotate(0deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        /* ═══ TARJETA COMPLETADA - IGUAL QUE APLICACIONES ═══ */
+        /* Tarjeta completada - SIN afectar el layout */
+.devotional-card.completed {
+    opacity: 0.75;
+    border-color: var(--success-color);
+}
+
+.devotional-card.completed::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+        rgba(76, 175, 80, 0.15) 0%, 
+        rgba(56, 142, 60, 0.1) 100%);
+    border-radius: 16px;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* El badge debe estar por encima del overlay */
+.devotional-card.completed .completed-badge {
+    z-index: 20;
+}
+
+        .empty-state {
+            text-align: center; padding: 4rem 2rem; color: var(--text-secondary);
+        }
+        .empty-state-icon { font-size: 4rem; margin-bottom: 1rem; opacity: 0.5; }
+        
+        @media (max-width: 768px) {
+            .filter-section { flex-direction: column; }
+            .filter-dropdown { min-width: 100%; }
+        }
+        .grid-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px;
+    background: #111;
+    border: 2px solid #333;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.grid-btn i {
+    font-size: 16px;
+}
+
+.grid-btn small {
+    font-size: 10px;
+    opacity: .7;
+}
+
+.grid-btn.active {
+    border-color: #f2f2f2;
+    box-shadow: 0 0 10px #8d8d8d40;
+}
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE DESIGN - MÓVILES Y TABLETS
+   ═══════════════════════════════════════════════════════ */
+
+/* TABLETS (768px - 1024px) */
+@media (max-width: 1024px) {
+    .music-controls {
+        top: 0px;
+        padding: 1.2rem;
+    }
+    
+    .filter-section {
+        flex-direction: column;
+    }
+    
+    .filter-dropdown {
+        min-width: 100%;
+    }
+    
+    .sort-select {
+        width: 100%;
+    }
+    
+    .grid-btn {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+/* MÓVILES (max-width: 768px) */
+@media (max-width: 768px) {
+    /* Barra de búsqueda sticky más compacta */
+    .music-controls {
+        top: 0;
+        padding: 1rem;
+        border-radius: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .search-box {
+        margin-bottom: 1rem;
+    }
+    
+    .search-box input {
+        font-size: 0.9rem;
+        padding: 0.8rem 2.5rem 0.8rem 1rem;
+    }
+    
+    /* Filtros en columna */
+    .filter-section {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .filter-dropdown {
+        min-width: 100%;
+    }
+    
+    /* Botones de grid más pequeños */
+    .grid-btn {
+        width: 40px;
+        height: 40px;
+        padding: 6px;
+    }
+    
+    .grid-btn i {
+        font-size: 14px;
+    }
+    
+    /* Selector de ordenamiento full width */
+    .sort-select {
+        width: 100%;
+        font-size: 0.85rem;
+        padding: 0.6rem 2rem 0.6rem 0.8rem;
+    }
+    
+    /* Stats de canciones más compactas */
+    .music-stats {
+        top: 8px;
+        right: 8px;
+        padding: 3px 6px;
+        gap: 6px;
+        font-size: 11px;
+        border-radius: 12px;
+    }
+    
+    .stat-item i {
+        font-size: 14px;
+    }
+    
+    .stat-number {
+        font-size: 10px;
+    }
+    
+    /* Tarjetas de canción */
+    .song-card {
+        border-radius: 12px;
+    }
+    
+    .song-info {
+        padding: 1rem;
+    }
+    
+    .song-title {
+        font-size: 0.95rem;
+    }
+    
+    .song-artist {
+        font-size: 0.8rem;
+    }
+    
+    .song-genre {
+        font-size: 0.65rem;
+        padding: 0.3rem 0.7rem;
+    }
+    
+    .song-btn {
+        font-size: 0.75rem;
+        padding: 0.6rem 0.4rem;
+    }
+    
+    /* Chips de filtros */
+    .filter-chip {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.7rem;
+    }
+    
+    /* Badge completado */
+    .completed-badge {
+        width: 35px;
+        height: 35px;
+        font-size: 1.1rem;
+    }
+    
+    /* Resultados */
+    .results-count {
+        font-size: 0.85rem;
+        margin-top: 0.8rem;
+    }
+}
+
+/* MÓVILES PEQUEÑOS (max-width: 480px) */
+@media (max-width: 480px) {
+    /* Controles ultra compactos */
+    .music-controls {
+        padding: 0.8rem;
+    }
+    
+    .search-box input {
+        font-size: 0.85rem;
+        padding: 0.7rem 2.5rem 0.7rem 0.9rem;
+    }
+    
+    /* Grid buttons en fila horizontal */
+    .filter-section {
+        gap: 0.6rem;
+    }
+    
+    .grid-btn {
+        width: 35px;
+        height: 35px;
+        padding: 4px;
+    }
+    
+    .grid-btn i {
+        font-size: 12px;
+    }
+    
+    /* Stats aún más pequeñas */
+    .music-stats {
+        top: 6px;
+        right: 6px;
+        padding: 2px 5px;
+        gap: 4px;
+        border-radius: 10px;
+    }
+    
+    .stat-item i {
+        font-size: 12px;
+    }
+    
+    .stat-number {
+        font-size: 9px;
+    }
+    
+    /* Tarjetas más compactas */
+    .song-info {
+        padding: 0.8rem;
+    }
+    
+    .song-title {
+        font-size: 0.9rem;
+    }
+    
+    .song-artist {
+        font-size: 0.75rem;
+    }
+    
+    .song-genre {
+        font-size: 0.6rem;
+        padding: 0.25rem 0.6rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .song-actions {
+        gap: 0.5rem;
+    }
+    
+    .song-btn {
+        font-size: 0.7rem;
+        padding: 0.55rem 0.3rem;
+    }
+    
+    /* Checkbox */
+    .checkbox-wrapper {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        gap: 0.6rem;
+    }
+    
+    .checkbox-wrapper input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .checkbox-wrapper label {
+        font-size: 0.8rem;
+    }
+    
+    /* Badge completado más pequeño */
+    .completed-badge {
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+        top: 8px;
+        right: 8px;
+    }
+    
+    /* Selector ordenamiento */
+    .sort-select {
+        font-size: 0.8rem;
+        padding: 0.55rem 2rem 0.55rem 0.7rem;
+    }
+    
+    /* Chips más pequeños */
+    .filter-chip {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.6rem;
+    }
+    
+    .filter-chip-close {
+        width: 16px;
+        height: 16px;
+        font-size: 0.7rem;
+    }
+}
+
+/* LANDSCAPE MODE (orientación horizontal en móviles) */
+@media (max-height: 500px) and (orientation: landscape) {
+    .music-controls {
+        position: relative;
+        top: 0;
+    }
+    
+    .song-card:hover {
+        transform: translateY(-4px) scale(1.01);
+    }
+}
+
+/* AJUSTES PARA STATS EN MÓVIL (posición responsive) */
+@media (max-width: 640px) {
+    .music-stats {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        left: auto;
+    }
+}
+
+/* GRID COLUMNS RESPONSIVE */
+/* ═══════════════════════════════════════════════════════
+   GRID AUTOMÁTICO RESPONSIVE (sin JS)
+   ═══════════════════════════════════════════════════════ */
+
+#musica-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    /* ↑ Automático: crea columnas de mínimo 280px */
+}
+
+/* Solo aplicar grid fijo cuando el usuario YA eligió columnas */
+#musica-grid[data-user-choice] {
+    grid-template-columns: var(--user-grid-columns);
+}
+
+/* Responsive para grid automático (solo si NO hay elección del usuario) */
+@media (max-width: 1400px) {
+    #musica-grid:not([data-user-choice]) {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+}
+
+@media (max-width: 1200px) {
+    #musica-grid:not([data-user-choice]) {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    #musica-grid:not([data-user-choice]) {
+        grid-template-columns: repeat(2, 1fr);
+        /* En móvil: SIEMPRE 2 columnas */
+    }
+}
+
+@media (max-width: 480px) {
+    #musica-grid:not([data-user-choice]) {
+        grid-template-columns: repeat(1, 1fr);
+        /* En móvil pequeño: SIEMPRE 1 columna */
+    }
+}
+
+/* Cuando el usuario elige columnas, mantenerlas en responsive */
+@media (max-width: 768px) {
+    #musica-grid[data-user-choice="5"],
+    #musica-grid[data-user-choice="4"],
+    #musica-grid[data-user-choice="3"] {
+        grid-template-columns: repeat(2, 1fr) !important;
+        /* Máximo 2 columnas en móvil */
+    }
+}
+
+@media (max-width: 480px) {
+    #musica-grid[data-user-choice] {
+        grid-template-columns: repeat(1, 1fr) !important;
+        /* Máximo 1 columna en móvil pequeño */
+    }
+}
+/* ══════ FORZAR BOTONES EN LÍNEA ══════ */
+.filter-section > div[style] {
+    flex-shrink: 0;  /* No se encoge */
+}
+
+.grid-btn {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    background: #1a1a1a;
+    border: 2px solid #333;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin: 0;  /* ✅ Sin márgenes */
+}
+
+.grid-btn i {
+    font-size: 16px;
+}
+
+.grid-btn:hover {
+    background: #2a2a2a;
+    border-color: #555;
+}
+
+.grid-btn.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(93, 64, 55, 0.4);
+}
+
+.sort-select {
+    flex-shrink: 0;  /* No se encoge */
+    min-width: 140px;
+}
+/* ===== Ajustes finales para filtros en móvil =====
+   Pegar al FINAL del CSS para que sobreescriba otras reglas */
+@media (max-width: 768px) {
+  .filter-section {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+    align-items: flex-start !important;
+  }
+
+  /* Hacer que Género y Artista compartan la fila (50% cada una) */
+  .filter-dropdown {
+    flex: 1 1 calc(50% - 0.25rem) !important;
+    min-width: 0 !important; /* permite que ocupen menos ancho */
+    box-sizing: border-box;
+    order: 1;
+  }
+
+  /* Selección de grid + select (puede ser el div inline existente) */
+  /* cubrimos tanto el caso con wrapper como sin wrapper */
+  .filter-section > div[style],
+  .filter-section .controls-group {
+    flex: 1 1 calc(50% - 0.25rem) !important;
+    min-width: 0 !important;
+    display: flex !important;
+    gap: 0.5rem !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    order: 2;
+  }
+
+  /* Que los botones de grid no colapsen */
+  .filter-section > div[style] .grid-btn,
+  .filter-section .controls-group .grid-btn {
+    flex: 0 0 auto !important;
+  }
+
+  /* El select ocupa lo que quede */
+  .filter-section .sort-select {
+    flex: 1 1 auto !important;
+    min-width: 120px !important;
+  }
+
+  /* Si el ancho es muy pequeño, hacemos que controles bajen a su propia fila
+     pero manteniendo botones + select juntos */
+  @media (max-width: 460px) {
+    .filter-dropdown { flex: 1 1 100% !important; order: 1; }
+    .filter-section > div[style],
+    .filter-section .controls-group { flex: 1 1 100% !important; order: 2; }
+    .filter-section { gap: 0.6rem !important; }
+  }
+}
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE MEJORADO PARA FILTROS
+   ═══════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    .filter-section {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 0.8rem !important;
+    }
+    
+    .filter-dropdown {
+        width: 100% !important;
+        min-width: 100% !important;
+    }
+    
+    /* Botones de grid + selector en la misma fila */
+    .filter-section > div[style] {
+        display: flex !important;
+        gap: 0.5rem !important;
+        width: 100%;
+        order: 3;
+    }
+    
+    .filter-section .sort-select {
+        flex: 1;
+        min-width: 0;
+        order: 4;
+    }
+    
+    .grid-btn {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+@media (max-width: 460px) {
+    .filter-section > div[style] {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+    }
+    
+    .filter-section .sort-select {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+}
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html" style="text-decoration: none;">
+                    <h1>✨ Exceso de Luz</h1>
+                    <p class="tagline">Ilumina tu camino espiritual</p>
+                </a>
+            </div>
+            <a href="index.html" class="btn-back">← Volver</a>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="container">
+            <div class="page-header">
+                <div class="page-icon">🎵</div>
+                <h2>Música Cristiana</h2>
+                <p>Descubre canciones de adoración y alabanza</p>
+            </div>
+
+            <div class="music-controls">
+                <div class="search-box">
+                    <input type="text" id="search-input" 
+                           placeholder="Buscar por canción, artista o álbum..." 
+                           autocomplete="off">
+                </div>
+
+                <!-- Filtros mejorados -->
+                <div class="filter-section">
+    <div class="filter-dropdown">
+        <button class="filter-btn-toggle" id="genero-toggle">
+            Género (todos)
+        </button>
+        <div class="filter-menu" id="genero-menu">
+            <!-- Se genera dinámicamente -->
+        </div>
+    </div>
+
+    <div class="filter-dropdown">
+        <button class="filter-btn-toggle" id="artista-toggle">
+            Artista (todos)
+        </button>
+        <div class="filter-menu" id="artista-menu">
+            <!-- Se genera dinámicamente -->
+        </div>
+    </div>
+
+    <!-- ✅ CONTROLES AGRUPADOS EN UN CONTENEDOR -->
+    <div style="display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0;">
+        <button class="grid-btn" data-cols="3" title="3 columnas">
+            <i class="fa-solid fa-grip-lines"></i>
+        </button>
+        <button class="grid-btn active" data-cols="4" title="4 columnas">
+            <i class="fa-solid fa-grip"></i>
+        </button>
+        <button class="grid-btn" data-cols="5" title="5 columnas">
+            <i class="fa-solid fa-table-cells"></i>
+        </button>
+    </div>
+
+    <!-- Selector de ordenamiento -->
+    <select id="sort-select" class="sort-select">
+        <option value="default">Por defecto</option>
+        <option value="most-played">🔥 Más escuchadas</option>
+        <option value="most-marked">✅ Más marcadas</option>
+    </select>
+</div>
+
+                <!-- Chips de filtros activos -->
+                <div class="active-filters" id="active-filters"></div>
+
+                <div class="results-count" id="results-count"></div>
+            </div>
+
+            <div class="resource-grid" id="musica-grid"></div>
+
+            <div id="empty-state" style="display: none;">
+                <div class="empty-state">
+                    <div class="empty-state-icon">🎵</div>
+                    <p>No se encontraron canciones con esos filtros</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Exceso de Luz</p>
+            <p class="verse">"Cantadle cántico nuevo" — Salmos 33:3</p>
+        </div>
+    </footer>
+    <a href="index.html" class="home-minimal" aria-label="Volver al inicio">🡰 Volver</a>
+
+    <script src="exceso_de_luz.js"></script>
+    <script>
+// ═══════════════════════════════════════════════════════
+// DATOS DE MÚSICA
+// ═══════════════════════════════════════════════════════
+const musicaData=[
+{id:'m1',titulo:'Precioso Jesús',artista:'Esperanza de Vida',genero:'Pop Rock',cover:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnSV36SHMex3yka98ZYLbZ8hMMmR7mqjZF0A&s',youtube:'https://youtu.be/j5Kgw9sWuYw?si=TOIdlbwUCSmTaFun',spotify:'https://open.spotify.com/intl-es/track/3YVVAZB6NvCzzrjDandHkm?si=ef79bee374dc4e9c'},
+{id:'m2',titulo:'Tumbas a Jardines',artista:'Elevation Worship ft. Brandon Lake',genero:'Pop Rock',cover:'https://www.datocms-assets.com/60663/1641410559-opt.jpg',youtube:'https://youtu.be/83l5uaVEbFs?si=BSXrn_x7-0z-RsY8',spotify:'https://open.spotify.com/intl-es/track/0LetLotK5ziqrdD7WWpGN1?si=f6d338ca76ca458d'},
+{id:'m3',titulo:'Un millón',artista:'Música Más Vida',genero:'Pop',cover:'https://s.mxmcdn.net/images-storage/albums4/2/1/2/5/2/7/40725212_500_500.jpg',youtube:'https://youtu.be/TNq_Zl5hl8U?si=vwHLkrva3sJILHyO',spotify:'https://open.spotify.com/intl-es/track/1F6ReLolLM9qRAmuKZOzwU?si=e67f00ff0a00400c'},
+{id:'m4',titulo:'Quien Dices Que Soy',artista:'Hillsong en Español',genero:'Pop Rock',cover:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxrtPpQAKUS6b-W70igtK6RC3EH4fW-ortXA&s',youtube:'https://youtu.be/vg_yO0Snj-8?si=PIxIG81Tt_eKrh_X',spotify:'https://open.spotify.com/intl-es/track/3e9mwcWovT8EfMdaGQpIqA?si=9e8b4934954f4837'},
+{id:'m5',titulo:'Lo Harás Otra Vez',artista:'Elevation Worship',genero:'Pop Rock',cover:'https://directorcreativo.s3.amazonaws.com/wp-content/uploads/2020/03/03143837/Lo-Hara%CC%81s-otra-vez-Elevation-Wprship.jpg',youtube:'https://youtu.be/es34Nr2JovU?si=mGepodlDBxx4cInC',spotify:'https://open.spotify.com/intl-es/track/3vcfHBHNmN5LG8otn8j4Kg?si=d29e52e5894b4409'},
+{id:'m6',titulo:'Inagotable',artista:'Living',genero:'Pop Rock',cover:'https://directorcreativo.s3.amazonaws.com/wp-content/uploads/2020/02/03143850/inagotable-living-1.jpg',youtube:'https://youtu.be/kqDIQmOCaMk?si=vxUeiXr8eqicLKtq',spotify:'https://open.spotify.com/intl-es/track/2jxhdu3VqGgKV3XRD7uY6B?si=bfd8eda804f84b24'},
+{id:'m7',titulo:'No Has Perdido',artista:'Elevation Worship',genero:'Pop Rock',cover:'https://directorcreativo.s3.amazonaws.com/wp-content/uploads/2020/06/03142103/NO_HAS_PERDIDO_ELEVATION_WORSHIP.jpg',youtube:'https://youtu.be/xLG8rF-Gxbc?si=hd4bSBsUEXAfyDNS',spotify:'https://open.spotify.com/intl-es/track/4pkLViZJzpVEiMGwE0fnPE?si=372336094cb84efc'},
+{id:'m8',titulo:'Yo Tambien',artista:'TWICE',genero:'Acustico',cover:'https://multitracks.blob.core.windows.net/public/images/albums/520/1592.jpg',youtube:'https://youtu.be/DdcpQlJW8u4?si=L2Of0nTUimqDt9Ax',spotify:'https://open.spotify.com/intl-es/track/1BiTNGWo3a37MSqMqBYMGK?si=a2f949bb109d4257'},
+{id:'m9',titulo:'Tal Como Soy',artista:'Hillsong UNITED',genero:'Pop Rock',cover:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkxIyjqakoBoCTfBpmEzhwEqJFlgA2XkePvA&s',youtube:'https://youtu.be/taJlTubjp_Q?si=tCIwDoN70L6h16f1',spotify:'https://open.spotify.com/intl-es/track/1Q4sF77WsxpF2SBN4iwcyo?si=00e181e87d9a4d2b'},
+{id:'m10',titulo:'El Nombre de Jesús',artista:'Redimi2 ft. Christine D\'Clario',genero:'Rap',cover:'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/3c/a9/df/3ca9df68-3342-943e-13f2-de46023e7427/cover.jpg/600x600bf-60.jpg',youtube:'https://youtu.be/bQNikeLRJQw?si=_8YSRpP27VAx7DCG',spotify:'https://open.spotify.com/intl-es/track/3TV8XC0r6VPHSBLdR1Fi2v?si=6d4ad61a4f87410b'},
+{id:'m11',titulo:'Indudablemente',artista:'Rescate',genero:'Rock',cover:'https://akamai.sscdn.co/uploadfile/letras/albuns/4/9/b/2/577971494856065.jpg',youtube:'https://youtu.be/llcKhII3TeM?si=Y5yUytJ12oMoZl-H',spotify:'https://open.spotify.com/intl-es/track/2423N8ZVbFoRnRJVAlPryQ?si=639191f35f694b22'},
+{id:'m12',titulo:'Es Tu Gloria',artista:'Kenneth Rojas',genero:'Balada Pop',cover:'https://s.mxmcdn.net/images-storage/albums4/8/8/1/7/5/0/36057188_500_500.jpg',youtube:'https://youtu.be/830ty0kZFSI?si=fc-cQgNHawHLfgyx',spotify:'https://open.spotify.com/intl-es/track/6RqQ9CNM0OI9MzOzNOfz6o?si=237700cdd660402f'},
+{id:'m13',titulo:'Fiel Hasta El Final',artista:'Seth Condrey',genero:'Pop',cover:'https://i.scdn.co/image/ab67616d0000b273c74f1bb9e7f1d284c53f0172',youtube:'https://youtu.be/6TuQVRa6Gd8?si=CqAB_GhAFouORvms',spotify:'https://open.spotify.com/intl-es/track/46TKn085Nsqf6q071HRnNd?si=8c05295fb0ab4f04'},
+{id:'m14',titulo:'Solo En Ti',artista:'Seth Condrey',genero:'Pop',cover:'https://i.scdn.co/image/ab67616d0000b273c74f1bb9e7f1d284c53f0172',youtube:'https://youtu.be/vIUzzBvfbJc?si=1Tp8kVyopjPxxjj8',spotify:'https://open.spotify.com/intl-es/track/14M6KeDiW8dHjvgxRxwTjB?si=49b8c1b9d14c4574'},
+{id:'m15',titulo:'Más Que Palabras',artista:'GeneraSion',genero:'Rock',cover:'https://cdn-images.dzcdn.net/images/cover/14b12d07a34d0aa56072b0c8f55c135a/0x1900-000000-80-0-0.jpg',youtube:'https://youtu.be/Km-Yg1upn08?si=rCbveOZXBMuF_8L4',spotify:'https://open.spotify.com/intl-es/track/0qFXfizhG79zP5PWXF2goG?si=bc4cc8085ac44375'},
+{id:'m16',titulo:'Eres Todo Lo Que Te Quiero Pedir',artista:'Radikl',genero:'Pop Rock',cover:'https://i.scdn.co/image/ab67616d0000b27385eb7bd911732b82f2e06487',youtube:'https://youtu.be/HmlynlhUK6E?si=Y_DiDlebbt0dbf9W',spotify:'https://open.spotify.com/intl-es/track/7yIc5WRtws3E6enDusTjfD?si=cb6df7ed5003425f'},
+{id:'m17',titulo:'Lo Mejor de Mi Vida',artista:'Puerto Seguro',genero:'Pop Rock',cover:'https://s.mxmcdn.net/images-storage/albums5/9/0/9/9/7/4/52479909_500_500.jpg',youtube:'https://youtu.be/UXiSgZkujUc?si=I3CUEBS6Lzmlzdo2',spotify:'https://open.spotify.com/intl-es/track/4r6miX9QVXzuL80zOaR8Ny?si=456af17c5615498e'},
+{id:'m18',titulo:'How He Loves (Live 2009)',artista:'John Mark McMillan',genero:'Rock',cover:'https://cdn.musicbed.com/image/upload/c_fill,dpr_auto,f_auto,g_auto,q_auto:best,h_400,w_400/v1586268830/production/albums/5903',youtube:'https://youtu.be/bLvgqqZvLZk?si=41o9yhig3Q0lg7Kb',spotify:'https://open.spotify.com/intl-es/track/7lyQyByOKZHDfzxRHvmyqe?si=eb3a962fc95f422e'},
+{id:'m19',titulo:'Él Estaba Ahí',artista:'Kyosko',genero:'Rock',cover:'https://i.scdn.co/image/ab67616d0000b273ff3f12cd4ec0fa13549122cc',youtube:'https://youtu.be/SyY_YfeDd0g?si=b6fq_3Gs0nvN9kSf',spotify:'https://open.spotify.com/intl-es/track/75YqMMLIjIn5MY7kDWUoSd?si=25dd9b78e05643d6'},
+{id:'m20',titulo:'Tan solo',artista:'Hey Oliver! ft. Fabián Liendo',genero:'Indie',cover:'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/ab/e3/b7/abe3b783-52a6-6dcb-b327-854137093e2e/859769984454_cover.jpg/400x400bb.webp',youtube:'https://youtu.be/DwOAM4zClbw?si=6OwkBh5IzUyFpbh3',spotify:'https://open.spotify.com/intl-es/track/5A2D95hg8Njn21TDah1omo?si=6fe31a8018d64bfa'},
+{id:'m21',titulo:'In Tenderness',artista:'Citizens',genero:'Indie',cover:'https://i.scdn.co/image/ab67616d0000b273c9d3859f1dd3c0f7ad9e84ae',youtube:'https://youtu.be/kI2zbHE6-Hc?si=bTUxZ5gowpg3DOD8',spotify:'https://open.spotify.com/intl-es/track/30bCufjVlIp2ASQcyQG5fK?si=277cfc177a124246'},
+{id:'m22',titulo:'Crece',artista:'Corto Plazo',genero:'Rock',cover:'https://i.scdn.co/image/ab67616d0000b27322406965eb8ef4a96badcf75',youtube:'https://youtu.be/8_TYjDprcVY?si=S8Jt8cESnF4Gm4Te',spotify:'https://open.spotify.com/intl-es/track/1TSTZ2sAwJ0e7xs8gMApEp?si=b7c84abaf4a049e9'},
+{id:'m23',titulo:'Mansión',artista:'Ágape',genero:'Folk',cover:'https://i.ytimg.com/vi/mjR8SR81vfQ/maxresdefault.jpg',youtube:'https://youtu.be/mjR8SR81vfQ?si=eFNQOYLaeWOjfymX',spotify:'https://open.spotify.com/intl-es/track/0ErRn5mSCneJOLPwSEeGjC?si=52d5931d481c45c7'},
+{id:'m24',titulo:'Nueva Vida',artista:'Hey Oliver!',genero:'Pop Rock',cover:'https://i.scdn.co/image/ab67616d00001e022e3b61c0ec05a5fc6b094deb',youtube:'https://youtu.be/nuYLE1uaRIU?si=roaXKrt6MJkscsAj',spotify:'https://open.spotify.com/intl-es/track/1R8gIudyYL1yajmJ3ZKl5q?si=7e073003e19f4eae'},
+{id:'m25',titulo:'Brillará por siempre',artista:'Kyosko',genero:'Rock Alternativo',cover:'https://i.scdn.co/image/ab67616d0000b273ff3f12cd4ec0fa13549122cc',youtube:'https://youtu.be/IacL9GPtJJQ?si=5F8esWXpqrMr9crq',spotify:'https://open.spotify.com/intl-es/track/4b339MymtzAujf21eUN3Kg?si=1b1e7e00c9304c43'},
+{id:'m26',titulo:'Rompe los Techos',artista:'Fila9',genero:'Rock Alternativo',cover:'https://i.ytimg.com/vi/tBsl3avGut8/maxresdefault.jpg',youtube:'https://youtu.be/62Qz7OYzPiA?si=bIj5tY1RfcdK7gQa',spotify:'https://open.spotify.com/intl-es/track/4nMju6RXSYXhvIi9SkMVRc?si=7a01253a629149b3'},
+{id:'m27',titulo:'Misterio',artista:'Hey Oliver!',genero:'Pop Rock',cover:'https://i.scdn.co/image/ab67616d0000b27380f1c3d8532173a013161dd4',youtube:'https://youtu.be/HQ2eOhAcB9I?si=LQw77q-7loJJjx-J',spotify:'https://open.spotify.com/intl-es/track/1DLP0sMGQJumjXTL6oXDcq?si=c3a6085c5e394ca9'},
+{id:'m28',titulo:'Inevitable',artista:'Hey Oliver!',genero:'Pop Rock',cover:'https://i.scdn.co/image/ab67616d0000b2738e60b02788ddccfd8ebe1b39',youtube:'https://youtu.be/1R3FXllwgq4?si=Gr4UYEM_uDhidhvk',spotify:'https://open.spotify.com/intl-es/track/1MAx6WhmA4ofdM7mmrGKKC?si=a62fbca8f6204093'},
+{id:'m29',titulo:'Toda lengua y toda nación',artista:'TOMATULUGAR',genero:'Pop',cover:'https://i.scdn.co/image/ab67616d0000b273937dfdbadd198ffaff9d938d',youtube:'https://youtu.be/K6VVzQr5dw4?si=Dgu-Z1KVo700nLO2',spotify:'https://open.spotify.com/intl-es/track/7peTmtAnLDHaraSDxe2tS4?si=04b9a7165c4d4550'},
+{id:'m30',titulo:'Verdadero Amor',artista:'Miguel Balboa',genero:'Pop',cover:'https://m.media-amazon.com/images/I/5124OCfUY9L._UXNaN_FMjpg_QL85_.jpg',youtube:'https://youtu.be/fUnAhSnJXDk?si=hkDpXUlU6bY90X4Y',spotify:'https://open.spotify.com/intl-es/track/6DQWM22heiu342gGSEXroM?si=7eb17ba31b2445ff'},
+{id:'m31',titulo:'Asi es tu amor',artista:'David Scarpeta ft. Alex Campos',genero:'Pop Latino',cover:'https://i1.sndcdn.com/artworks-000072824854-7zrc7l-t500x500.jpg',youtube:'https://youtu.be/erdeN75MRvA?si=y35NQTEEHROXec3f',spotify:'https://open.spotify.com/intl-es/track/73Ly7WOEZpF9Fcwnd1eX4M?si=6e117e90cf824386'},
+{id:'m32',titulo:'A un Mundo',artista:'Fila9',genero:'Rock Alternativo',cover:'https://i.ytimg.com/vi/ywOu5_JQoJw/maxresdefault.jpg',youtube:'https://youtu.be/IL10qghFBu8?si=qfYbrTpgPXJDGFLg',spotify:'https://open.spotify.com/intl-es/track/5hQrushs04kHnCxWQ7sYVP?si=ad2db6fa90694c27'},
+{id:'m33',titulo:'Depende de vos',artista:'Kyosko',genero:'Rock Alternativo',cover:'https://i.scdn.co/image/ab67616d0000b2732072421abb8a933e363c6b3a',youtube:'https://youtu.be/_nEIgFoJM3I?si=-oD-1hPSddmtP_6m',spotify:'https://open.spotify.com/intl-es/track/2jd0Lrgz8hWbf1retQWDLy?si=5d8db2c09ca04218'},
+{id:'m34',titulo:'De Sol a Sol',artista:'DeLuz',genero:'Pop Rock',cover:'https://directorcreativo.s3.amazonaws.com/wp-content/uploads/2022/04/07154619/DELUZ.jpg',youtube:'https://youtu.be/4EYB4b03bKI?si=y84wJUoy3xB8ZunX',spotify:'https://open.spotify.com/intl-es/track/4YXJ77DmWMUIF9PH7WKCXD?si=c662f9c2474a4435'},
+{id:'m35',titulo:'The Prodigal',artista:'Josiah Queen',genero:'Folk',cover:'https://i.scdn.co/image/ab67616d0000b273e58cec4bf807e528193065cf',youtube:'https://youtu.be/3B3hC706X90?si=WxwI7n_qwkD03JVQ',spotify:'https://open.spotify.com/intl-es/track/6BqobW3pEDxEvgznbam8kv?si=e025367fdbb442ae'},
+{id:'m36',titulo:'My Promised Land',artista:'Josiah Queen',genero:'Folk',cover:'https://i.scdn.co/image/ab67616d0000b273e58cec4bf807e528193065cf',youtube:'https://youtu.be/pESKlPWNFq4?si=WQZXsm_AcU7f08Oe',spotify:'https://open.spotify.com/intl-es/track/0sXSFQXGhkXzmdt07flWXl?si=27836a0fa2a04178'},
+{id:'m37',titulo:'Your Love',artista:'Strings & Heart',genero:'Indie',cover:'https://cdn-images.dzcdn.net/images/cover/757abdab63ceac3120f373396f708f84/0x1900-000000-80-0-0.jpg',youtube:'https://youtu.be/zl0lQ_KYxaY?si=TxXBS2wFg-SluCNi',spotify:'https://open.spotify.com/intl-es/track/38IxLzISEY1Xd12BW5YG7B?si=81c56a93192046e6'},
+{id:'m38',titulo:'Evergreen Love',artista:'Strings & Heart',genero:'Indie',cover:'https://i.scdn.co/image/ab67616d0000b27369c0e58af9410984f1456583',youtube:'https://youtu.be/QJBm_SE4fC0?si=vyZ9_RF1xtiHHnJZ',spotify:'https://open.spotify.com/intl-es/track/5uHmaCMrEFNSgUbV4sPJS8?si=59fc838d6d4e408d'},
+{id:'m39',titulo:'Love you to death',artista:'Josiah Queen and Strings & Heart',genero:'Indie Folk',cover:'https://m.media-amazon.com/images/I/31ai+GlVJwL._UXNaN_FMjpg_QL85_.jpg',youtube:'https://youtu.be/J-Db_KvgN60?si=ve6_HyPMA2Z-geju',spotify:'https://open.spotify.com/intl-es/track/038oMg4ynAot6syKlk70S1?si=a6a04a566c56479e'},
+{id:'m40',titulo:'YOUR WAY\'S BETTER',artista:'Forrest Frank',genero:'Hip Hop',cover:'https://akamai.sscdn.co/letras/360x360/albuns/4/d/d/a/2426871730811564.jpg',youtube:'https://youtu.be/z5M6924Cy0w?si=3frbtUUtAm28X42U',spotify:'https://open.spotify.com/intl-es/track/7JDfWHxOFo63yQmVs5wSPM?si=64989a370ec047e6'},
+{id:'m41',titulo:'LIFT MY HANDS',artista:'Forrest Frank',genero:'Hip Hop',cover:'https://cdn-images.dzcdn.net/images/cover/8f09947ba14ee5ed728811354cf3b33e/0x1900-000000-80-0-0.jpg',youtube:'https://youtu.be/61glE8IX1lQ?si=Ha_MUYs-HdQGVlgf',spotify:'https://open.spotify.com/intl-es/track/4jXmegtNUBkagUxOoaVnCh?si=6c3e3c706a1c4ae7'},
+{id:'m42',titulo:'GOD IS GOOD',artista:'Forrest Frank Ft. Caleb Gordon',genero:'Hip Hop',cover:'https://i.scdn.co/image/ab67616d0000b273c77f48c6deee318b1b60feef',youtube:'https://youtu.be/o3ETVqqSXTc?si=P7tjTT7LhUX58dZY',spotify:'https://open.spotify.com/intl-es/track/2gmqnkY0jrfz3vnO4FVS4p?si=600332f20181454a'},
+{id:'m43',titulo:'NO LONGER BOUND',artista:'Forrest Frank Ft. Hulvey',genero:'Hip Hop',cover:'https://i.scdn.co/image/ab67616d0000b273ff6322ab25bd4cb8d7dbbb06',youtube:'https://youtu.be/zweTWjGa3rM?si=E9e71uaRz3vv9X6H',spotify:'https://open.spotify.com/intl-es/track/0fpq0dLG0T477C0QSxJwUd?si=7ae9d73de2ce435b'},
+{id:'m44',titulo:'Count \'Em',artista:'Brandon Lake',genero:'Pop Rock',cover:'https://upload.wikimedia.org/wikipedia/en/thumb/3/36/Count_%27Em_-_Brandon_Lake.jpg/250px-Count_%27Em_-_Brandon_Lake.jpg',youtube:'https://youtu.be/a6Ti41hJ5fQ?si=u9l_LhSRMLVnvTfS',spotify:'https://open.spotify.com/intl-es/track/5tgXL0bJKzjwC2hZSYJzgl?si=3ebf11d4101c48a2'},
+{id:'m45',titulo:'FREE!',artista:'SEU Worship y David Ryan Cook',genero:'Pop',cover:'https://m.media-amazon.com/images/I/51Uyjf92+AL._UXNaN_FMjpg_QL85_.jpg',youtube:'https://youtu.be/5NZFgqoWMq0?si=Ma4FhuMn1muv36Gw',spotify:'https://open.spotify.com/intl-es/track/6TK9UE4eODGbyimh0qEYoq?si=bbd05540cc804313'},
+];
+
+// ═══════════════════════════════════════════════════════
+// UTILIDADES
+// ═══════════════════════════════════════════════════════
+function extraerArtistas(str) {
+    return str.split(/\s+(?:ft\.?|feat\.?|featuring)\s+/i).map(a=>a.trim()).filter(a=>a);
+}
+function mezclar(arr) {
+    const c=[...arr]; for(let i=c.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[c[i],c[j]]=[c[j],c[i]];} return c;
+}
+
+// ═══════════════════════════════════════════════════════
+// ESTADO
+// ═══════════════════════════════════════════════════════
+let busqueda='',generosSeleccionados=[],artistasSeleccionados=[];
+
+// ═══════════════════════════════════════════════════════
+// OBTENER DATOS ÚNICOS
+// ═══════════════════════════════════════════════════════
+function obtenerGeneros() {
+    return [...new Set(musicaData.map(s=>s.genero))].sort();
+}
+
+function obtenerArtistasDisponibles() {
+    let canciones = musicaData;
+    if (generosSeleccionados.length > 0) {
+        canciones = musicaData.filter(s => generosSeleccionados.includes(s.genero));
+    }
+    const artistas = new Set();
+    canciones.forEach(s => {
+        extraerArtistas(s.artista).forEach(a => artistas.add(a));
+    });
+    return [...artistas].sort();
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER TARJETAS
+// ═══════════════════════════════════════════════════════
+function crear(s) {
+    const completado = progresoManager.estaCompletado(s.id);
+    return `<div class="song-card ${completado?'completed':''}" data-id="${s.id}">
+    <div class="song-cover-wrapper">
+  <img src="${s.cover}" alt="${s.titulo}" class="song-cover" loading="lazy">
+  ${completado?'<div class="completed-badge">✓</div>':''}
+
+  <div class="music-stats" data-id="${s.id}">
+    <span class="stat-item" title="Reproducciones">
+      <i class="fa-solid fa-eye" aria-hidden="true"></i>
+      <span id="plays-${s.id}" class="stat-number">0</span>
+    </span>
+    <span class="stat-item" title="Marcadas como escuchada">
+      <i class="fa-solid fa-check" aria-hidden="true"></i>
+      <span id="marked-${s.id}" class="stat-number">0</span>
+    </span>
+  </div>
+</div>
+    <div class="song-info">
+        <div class="song-title">${s.titulo}</div>
+        <div class="song-artist">${s.artista}</div>
+        <span class="song-genre">${s.genero}</span>
+        <div class="song-actions">
+            <a href="${s.youtube}" target="_blank" rel="noopener" class="song-btn btn-youtube" data-song-id="${s.id}"><span>▶ YouTube</span></a>
+            <a href="${s.spotify}" target="_blank" rel="noopener" class="song-btn btn-spotify" data-song-id="${s.id}"><span>♫ Spotify</span></a>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="${s.id}" ${completado?'checked':''}>
+            <label for="${s.id}">${completado?'✓ Escuchada':'Marcar como escuchada'}</label>
+        </div>
+    </div>
+</div>`;
+}
+
+function render() {
+    const g=document.getElementById('musica-grid'),e=document.getElementById('empty-state'),r=document.getElementById('results-count');
+    
+    // Filtrar canciones
+    let f=musicaData.filter(c=>{
+        const b=busqueda===''||c.titulo.toLowerCase().includes(busqueda)||c.artista.toLowerCase().includes(busqueda);
+        const gen=generosSeleccionados.length===0||generosSeleccionados.includes(c.genero);
+        const art=artistasSeleccionados.length===0||extraerArtistas(c.artista).some(a=>artistasSeleccionados.includes(a));
+        return b&&gen&&art;
+    });
+    
+    // Separar y mezclar
+    // Separar completadas y no completadas
+const nc=f.filter(c=>!progresoManager.estaCompletado(c.id));
+const co=f.filter(c=>progresoManager.estaCompletado(c.id));
+
+// Obtener tipo de ordenamiento
+const sortType = document.getElementById('sort-select')?.value || 'default';
+
+if (sortType === 'most-played') {
+    // Ordenar por más reproducciones
+    nc.sort((a, b) => {
+        const statsA = window._musicStatsCache[a.id] || { plays: 0 };
+        const statsB = window._musicStatsCache[b.id] || { plays: 0 };
+        return statsB.plays - statsA.plays;
+    });
+    co.sort((a, b) => {
+        const statsA = window._musicStatsCache[a.id] || { plays: 0 };
+        const statsB = window._musicStatsCache[b.id] || { plays: 0 };
+        return statsB.plays - statsA.plays;
+    });
+} else if (sortType === 'most-marked') {
+    // Ordenar por más marcadas
+    nc.sort((a, b) => {
+        const statsA = window._musicStatsCache[a.id] || { marked: 0 };
+        const statsB = window._musicStatsCache[b.id] || { marked: 0 };
+        return statsB.marked - statsA.marked;
+    });
+    co.sort((a, b) => {
+        const statsA = window._musicStatsCache[a.id] || { marked: 0 };
+        const statsB = window._musicStatsCache[b.id] || { marked: 0 };
+        return statsB.marked - statsA.marked;
+    });
+} else {
+    // Orden aleatorio (por defecto)
+    nc.splice(0, nc.length, ...mezclar(nc));
+    co.splice(0, co.length, ...mezclar(co));
+}
+
+f=[...nc,...co];
+    
+    // Renderizar
+    if(!f.length){
+        g.style.display='none';
+        e.style.display='block';
+        r.textContent='';
+    }else{
+        g.style.display='grid';
+        e.style.display='none';
+        g.innerHTML=f.map(crear).join('');
+        
+        // ✅ CARGAR STATS DESDE CACHE
+        syncStatsToDomFromCache(f);
+        
+        r.textContent=`${f.length} canción${f.length!==1?'es':''} encontrada${f.length!==1?'s':''}`;
+        
+        // ✅ EVENT LISTENERS PARA CHECKBOXES (UN SOLO HANDLER)
+        g.querySelectorAll('.checkbox-wrapper input').forEach(cb => {
+            cb.addEventListener('change', async (e) => {
+                const card = e.target.closest('.song-card');
+                const songId = card.dataset.id;
+                const song = musicaData.find(s => s.id === songId);
+                const label = card.querySelector('.checkbox-wrapper label');
+                const coverWrapper = card.querySelector('.song-cover-wrapper');
+                const checked = e.target.checked;
+
+                // UI OPTIMISTA
+                if (checked) {
+                    card.classList.add('completed');
+                    if (label) label.textContent = '✓ Escuchada';
+                    if (coverWrapper && !coverWrapper.querySelector('.completed-badge')) {
+                        coverWrapper.insertAdjacentHTML('beforeend','<div class="completed-badge">✓</div>');
+                    }
+                } else {
+                    card.classList.remove('completed');
+                    if (label) label.textContent = 'Marcar como escuchada';
+                    const badge = coverWrapper && coverWrapper.querySelector('.completed-badge');
+                    if (badge) badge.remove();
+                }
+
+                // PERSISTIR EN PROGRESO MANAGER
+                try {
+                    if (checked) {
+                        progresoManager.marcarCompletado(songId, song.titulo, 'musica');
+                        mostrarNotificacion('¡Canción marcada! 🎵');
+                    } else {
+                        progresoManager.desmarcarCompletado(songId);
+                        mostrarNotificacion('Canción desmarcada');
+                    }
+
+                    // ✅ REGISTRAR EN FIREBASE
+                    if (typeof window.registrarMarked === 'function') {
+                        await window.registrarMarked(songId, checked ? 1 : -1);
+                    }
+
+                    // ✅ REORDENAR (MOVER AL FINAL)
+                    setTimeout(() => render(), 100);
+                    
+                } catch (err) {
+                    console.error('Error guardando:', err);
+                }
+            });
+        });
+
+        // ✅ EVENT LISTENERS PARA BOTONES YOUTUBE/SPOTIFY
+        g.querySelectorAll('.btn-youtube, .btn-spotify').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const songId = btn.dataset.songId;
+                
+                // Registrar play en Firebase
+                if (typeof window.registrarPlay === 'function') {
+                    window.registrarPlay(songId);
+                }
+                
+                // Abrir en nueva pestaña
+                window.open(btn.href, '_blank');
+            });
+        });
+    }
+    
+    actualizarChips();
+    actualizarTextoBotones();
+}
+
+// ═══════════════════════════════════════════════════════
+// CHIPS DE FILTROS
+// ═══════════════════════════════════════════════════════
+function actualizarChips() {
+    const c=document.getElementById('active-filters');c.innerHTML='';
+    generosSeleccionados.forEach(g=>{
+        const ch=document.createElement('div');ch.className='filter-chip';
+        ch.innerHTML=`<span>Género: ${g}</span><span class="filter-chip-close" data-tipo="genero" data-valor="${g}">×</span>`;
+        c.appendChild(ch);
+    });
+    artistasSeleccionados.forEach(a=>{
+        const ch=document.createElement('div');ch.className='filter-chip';
+        ch.innerHTML=`<span>Artista: ${a}</span><span class="filter-chip-close" data-tipo="artista" data-valor="${a}">×</span>`;
+        c.appendChild(ch);
+    });
+    c.querySelectorAll('.filter-chip-close').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            const t=btn.dataset.tipo,v=btn.dataset.valor;
+            if(t==='genero'){
+                generosSeleccionados=generosSeleccionados.filter(x=>x!==v);
+                renderGeneros();
+                renderArtistas();
+            }else if(t==='artista'){
+                artistasSeleccionados=artistasSeleccionados.filter(x=>x!==v);
+                renderArtistas();
+            }
+            render();
+        });
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER MENÚS
+// ═══════════════════════════════════════════════════════
+function renderGeneros() {
+    const menu = document.getElementById('genero-menu');
+    const generos = obtenerGeneros();
+    menu.innerHTML = generos.map(g => `
+        <div class="filter-option ${generosSeleccionados.includes(g)?'selected':''}" data-valor="${g}">
+            <input type="checkbox" id="gen-${g}" ${generosSeleccionados.includes(g)?'checked':''}>
+            <label for="gen-${g}">${g}</label>
+        </div>
+    `).join('');
+    
+    menu.querySelectorAll('.filter-option').forEach(opt => {
+        opt.addEventListener('click', (e) => {
+            if (e.target.tagName === 'INPUT') return;
+            const checkbox = opt.querySelector('input');
+            checkbox.checked = !checkbox.checked;
+            toggleGenero(opt.dataset.valor);
+        });
+        
+        opt.querySelector('input').addEventListener('change', (e) => {
+            e.stopPropagation();
+            toggleGenero(opt.dataset.valor);
+        });
+    });
+}
+
+function renderArtistas() {
+    const menu = document.getElementById('artista-menu');
+    const artistas = obtenerArtistasDisponibles();
+    menu.innerHTML = artistas.map(a => `
+        <div class="filter-option ${artistasSeleccionados.includes(a)?'selected':''}" data-valor="${a}">
+            <input type="checkbox" id="art-${a.replace(/\s+/g,'-')}" ${artistasSeleccionados.includes(a)?'checked':''}>
+            <label for="art-${a.replace(/\s+/g,'-')}">${a}</label>
+        </div>
+    `).join('');
+    
+    menu.querySelectorAll('.filter-option').forEach(opt => {
+        opt.addEventListener('click', (e) => {
+            if (e.target.tagName === 'INPUT') return;
+            const checkbox = opt.querySelector('input');
+            checkbox.checked = !checkbox.checked;
+            toggleArtista(opt.dataset.valor);
+        });
+        
+        opt.querySelector('input').addEventListener('change', (e) => {
+            e.stopPropagation();
+            toggleArtista(opt.dataset.valor);
+        });
+    });
+}
+
+function toggleGenero(g) {
+    if (generosSeleccionados.includes(g)) {
+        generosSeleccionados = generosSeleccionados.filter(x => x !== g);
+    } else {
+        generosSeleccionados.push(g);
+    }
+    renderGeneros();
+    renderArtistas();
+    render();
+}
+
+function toggleArtista(a) {
+    if (artistasSeleccionados.includes(a)) {
+        artistasSeleccionados = artistasSeleccionados.filter(x => x !== a);
+    } else {
+        artistasSeleccionados.push(a);
+    }
+    renderArtistas();
+    render();
+}
+
+function actualizarTextoBotones() {
+    const genBtn = document.getElementById('genero-toggle');
+    const artBtn = document.getElementById('artista-toggle');
+    
+    if (generosSeleccionados.length === 0) {
+        genBtn.textContent = 'Género (todos)';
+    } else if (generosSeleccionados.length === 1) {
+        genBtn.textContent = `Género: ${generosSeleccionados[0]}`;
+    } else {
+        genBtn.textContent = `Género (${generosSeleccionados.length})`;
+    }
+    
+    if (artistasSeleccionados.length === 0) {
+        artBtn.textContent = 'Artista (todos)';
+    } else if (artistasSeleccionados.length === 1) {
+        artBtn.textContent = `Artista: ${artistasSeleccionados[0]}`;
+    } else {
+        artBtn.textContent = `Artista (${artistasSeleccionados.length})`;
+    }
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+function inicializarFiltros() {
+    renderGeneros();
+    renderArtistas();
+    
+    document.getElementById('genero-toggle').addEventListener('click', () => {
+        const menu = document.getElementById('genero-menu');
+        const btn = document.getElementById('genero-toggle');
+        menu.classList.toggle('show');
+        btn.classList.toggle('active');
+        document.getElementById('artista-menu').classList.remove('show');
+        document.getElementById('artista-toggle').classList.remove('active');
+    });
+    
+    document.getElementById('artista-toggle').addEventListener('click', () => {
+        const menu = document.getElementById('artista-menu');
+        const btn = document.getElementById('artista-toggle');
+        menu.classList.toggle('show');
+        btn.classList.toggle('active');
+        document.getElementById('genero-menu').classList.remove('show');
+        document.getElementById('genero-toggle').classList.remove('active');
+    });
+    
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.filter-dropdown')) {
+            document.querySelectorAll('.filter-menu').forEach(m => m.classList.remove('show'));
+            document.querySelectorAll('.filter-btn-toggle').forEach(b => b.classList.remove('active'));
+        }
+    });
+    
+    document.getElementById('search-input').addEventListener('input', e => {
+        busqueda = e.target.value.trim().toLowerCase();
+        render();
+    });
+    // Selector de ordenamiento
+    document.getElementById('sort-select').addEventListener('change', () => {
+        render();
+    });
+
+    // ═══════════════════════════════════════════════════════
+    // GRID INTELIGENTE - Automático + Manual
+    // ═══════════════════════════════════════════════════════
+
+    function aplicarColumnas(cols, manual = false) {
+    const grid = document.getElementById('musica-grid');
+    if (!grid) return;
+    
+    if (manual) {
+        // Usuario eligió manualmente
+        grid.setAttribute('data-user-choice', cols);
+        grid.style.setProperty('--user-grid-columns', `repeat(${cols}, 1fr)`);
+        localStorage.setItem('musica-grid-cols', cols);
+        localStorage.setItem('musica-grid-manual', 'true');
+        console.log('✅ Usuario eligió:', cols, 'columnas');
+    } else {
+        // Grid automático (sin elección del usuario)
+        grid.removeAttribute('data-user-choice');
+        grid.style.removeProperty('--user-grid-columns');
+        console.log('🔄 Grid automático activado');
+    }
+    
+    // Actualizar botones activos
+    document.querySelectorAll('.grid-btn').forEach(b => b.classList.remove('active'));
+    if (cols) {
+        const btnActivo = document.querySelector(`.grid-btn[data-cols="${cols}"]`);
+        if (btnActivo) btnActivo.classList.add('active');
+    }
+    }
+
+// Event listeners para botones de grid
+document.querySelectorAll('.grid-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const cols = btn.dataset.cols;
+        aplicarColumnas(cols, true); // true = elección manual
+    });
+});
+
+// Al cargar la página - inicializar grid
+const savedCols = localStorage.getItem('musica-grid-cols');
+const esManual = localStorage.getItem('musica-grid-manual') === 'true';
+
+if (esManual && savedCols) {
+    // Restaurar elección del usuario
+    setTimeout(() => aplicarColumnas(savedCols, true), 100);
+} else {
+    // Grid automático (sin marcar ningún botón)
+    aplicarColumnas(null, false);
+}
+
+// Event listeners para botones de grid
+document.querySelectorAll('.grid-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const cols = btn.dataset.cols;
+        cambiarColumnas(cols);
+    });
+});
+
+// Cargar preferencia al iniciar
+window.addEventListener('DOMContentLoaded', () => {
+    const savedCols = localStorage.getItem('musica-grid-cols') || '4';
+    setTimeout(() => {
+        cambiarColumnas(savedCols);
+    }, 100);
+});
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof guardarConteoCategoria === 'function') {
+        guardarConteoCategoria('musica', musicaData.length);
+    }
+    
+    // ✅ SUSCRIBIRSE A TODAS LAS CANCIONES EN FIREBASE
+    if (typeof subscribeAllMusicDocs === 'function') {
+        subscribeAllMusicDocs(musicaData.map(s => s.id));
+    }
+    
+    inicializarFiltros();
+    render();
+    if (typeof iniciarScrollHeader === 'function') iniciarScrollHeader();
+});
+    </script>
+
+    <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, setDoc, increment, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyARYSgelNGVVpOryuq0Z3YCZxoqYA8TUns",
+  authDomain: "exceso-de-luz.firebaseapp.com",
+  projectId: "exceso-de-luz",
+  storageBucket: "exceso-de-luz.firebasestorage.app",
+  messagingSenderId: "442481525938",
+  appId: "1:442481525938:web:e72a2672a589e594aeb5ab",
+  measurementId: "G-GLTKTGY2GG"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window._musicStatsCache = window._musicStatsCache || {};
+window._musicUnsubsAll = window._musicUnsubsAll || {};
+
+window.registrarPlay = async function(songId){
+  try{
+    const ref = doc(db, 'musica', songId);
+    await setDoc(ref, {
+      plays: increment(1),
+      lastPlay: new Date()
+    }, { merge: true });
+    console.log('✅ Play registrado:', songId);
+  }catch(err){
+    console.error('❌ Error registrarPlay', err);
+  }
+};
+
+window.registrarMarked = async function(songId, delta){
+  try{
+    const ref = doc(db, 'musica', songId);
+    await setDoc(ref, {
+      marked: increment(delta),
+      lastMarked: new Date()
+    }, { merge: true });
+    console.log('✅ Marked actualizado:', songId, delta);
+  }catch(err){
+    console.error('❌ Error registrarMarked', err);
+  }
+};
+
+function subscribeMusicDoc(songId){
+  if (window._musicUnsubsAll[songId]) return;
+  const ref = doc(db, 'musica', songId);
+  const unsub = onSnapshot(ref, snap => {
+    const data = snap.exists() ? snap.data() : {};
+    const stats = {
+      plays: data.plays || 0,
+      marked: data.marked || 0
+    };
+    window._musicStatsCache[songId] = stats;
+    
+    const playsEl = document.getElementById(`plays-${songId}`);
+    const markedEl = document.getElementById(`marked-${songId}`);
+    if (playsEl) playsEl.textContent = stats.plays;
+    if (markedEl) markedEl.textContent = stats.marked;
+  }, err => console.error('❌ snapshot error', err));
+  window._musicUnsubsAll[songId] = unsub;
+}
+
+window.subscribeAllMusicDocs = function(allSongIds) {
+  allSongIds.forEach(id => subscribeMusicDoc(id));
+};
+
+window.syncStatsToDomFromCache = function(visibleSongList) {
+  visibleSongList.forEach(s => {
+    const cached = window._musicStatsCache[s.id] || { plays: 0, marked: 0 };
+    const playsEl = document.getElementById(`plays-${s.id}`);
+    const markedEl = document.getElementById(`marked-${s.id}`);
+    if (playsEl) playsEl.textContent = cached.plays;
+    if (markedEl) markedEl.textContent = cached.marked;
+  });
+};
+
+console.log('🔥 Firebase music stats ready');
+</script>
+
+</body>
+</html>

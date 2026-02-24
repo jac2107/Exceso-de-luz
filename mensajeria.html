@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contáctanos - Exceso de Luz</title>
+    <link rel="stylesheet" href="exceso_de_luz.css">
+    <style>
+        /* ══════════════════════════════════════════════════════
+           ESTILOS DEL FORMULARIO
+           ══════════════════════════════════════════════════════ */
+        .contact-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .intro-section {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .intro-section h3 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .intro-section p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        /* Categorías de mensaje */
+        .category-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .category-option {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .category-option:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(93, 64, 55, 0.15);
+        }
+
+        .category-option.selected {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, 
+                rgba(215, 204, 200, 0.2) 0%, 
+                rgba(239, 235, 233, 0.15) 100%);
+            box-shadow: 0 4px 12px rgba(93, 64, 55, 0.2);
+        }
+
+        .category-option input[type="radio"] {
+            display: none;
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .category-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
+        }
+
+        .category-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Formulario */
+        .contact-form {
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.6rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group label .required {
+            color: #e74c3c;
+            margin-left: 3px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.9rem 1.1rem;
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(93, 64, 55, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+            line-height: 1.6;
+        }
+
+        .char-counter {
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.4rem;
+        }
+
+        .char-counter.warning {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        /* Checkbox de privacidad */
+        .privacy-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--bg-main);
+            border-radius: 10px;
+        }
+
+        .privacy-check input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .privacy-check label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Botón de envío */
+        .submit-btn {
+            width: 100%;
+            padding: 1.1rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--color-marron) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(93, 64, 55, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .submit-btn i {
+            font-size: 1.1rem;
+        }
+
+        /* Estados del formulario */
+        .form-message {
+            padding: 1rem 1.3rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            display: none;
+            align-items: center;
+            gap: 0.8rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-message.show {
+            display: flex;
+        }
+
+        .form-message.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .form-message.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .form-message i {
+            font-size: 1.3rem;
+        }
+
+        /* Sección de estadísticas */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 1.8rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(93, 64, 55, 0.15);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin-top: 3rem;
+        }
+
+        .faq-section h3 {
+            text-align: center;
+            color: var(--text-primary);
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--primary-color);
+        }
+
+        .faq-question {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.05rem;
+        }
+
+        .faq-question i {
+            font-size: 0.9rem;
+            transition: transform 0.3s ease;
+            color: var(--primary-color);
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            margin-top: 1rem;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            border: 3px solid rgba(0,0,0,0.1);
+            border-top-color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .contact-form {
+                padding: 1.5rem;
+            }
+
+            .category-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
+
+            .intro-section h3 {
+                font-size: 1.3rem;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html" style="text-decoration: none;">
+                    <h1>✨ Exceso de Luz</h1>
+                    <p class="tagline">Ilumina tu camino espiritual</p>
+                </a>
+            </div>
+            <a href="index.html" class="btn-back">← Volver</a>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="container contact-container">
+            <div class="page-header">
+                <div class="page-icon">💬</div>
+                <h2>Contáctanos</h2>
+                <p>Tu opinión nos ayuda a mejorar. Comparte tus ideas, sugerencias o reporta algún problema</p>
+            </div>
+
+            <!-- Intro -->
+            <div class="intro-section">
+                <h3>¡Queremos escucharte! 👂</h3>
+                <p>
+                    Exceso de Luz crece gracias a personas como tú. Ya sea una sugerencia de contenido, 
+                    una mejora técnica, o simplemente compartir cómo esta plataforma te ha ayudado, 
+                    cada mensaje es valioso para nosotros.
+                </p>
+            </div>
+
+            <!-- Categorías -->
+            <div class="category-selector">
+                <label class="category-option">
+                    <input type="radio" name="category" value="sugerencia" checked>
+                    <div class="category-icon">💡</div>
+                    <div class="category-title">Sugerencia</div>
+                    <div class="category-desc">Ideas para nuevo contenido</div>
+                </label>
+
+                <label class="category-option">
+                    <input type="radio" name="category" value="mejora">
+                    <div class="category-icon">⚡</div>
+                    <div class="category-title">Mejora</div>
+                    <div class="category-desc">Optimizaciones y cambios</div>
+                </label>
+
+                <label class="category-option">
+                    <input type="radio" name="category" value="error">
+                    <div class="category-icon">🐛</div>
+                    <div class="category-title">Reportar Error</div>
+                    <div class="category-desc">Algo no funciona bien</div>
+                </label>
+
+                <label class="category-option">
+                    <input type="radio" name="category" value="testimonio">
+                    <div class="category-icon">❤️</div>
+                    <div class="category-title">Testimonio</div>
+                    <div class="category-desc">Comparte tu experiencia</div>
+                </label>
+
+                <label class="category-option">
+                    <input type="radio" name="category" value="pregunta">
+                    <div class="category-icon">❓</div>
+                    <div class="category-title">Pregunta</div>
+                    <div class="category-desc">Consultas generales</div>
+                </label>
+
+                <label class="category-option">
+                    <input type="radio" name="category" value="otro">
+                    <div class="category-icon">📝</div>
+                    <div class="category-title">Otro</div>
+                    <div class="category-desc">Cualquier otro tema</div>
+                </label>
+            </div>
+
+            <!-- Formulario -->
+            <form class="contact-form" id="contact-form">
+                <div class="form-message" id="form-message"></div>
+
+                <div class="form-group">
+                <label for="name">
+                    Tu nombre <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 400;">(opcional)</span>
+                </label>
+                <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    placeholder="Anónimo"
+                    maxlength="100"
+                >
+            </div>
+
+
+                <div class="form-group">
+                    <label for="message">
+                        Tu mensaje <span class="required">*</span>
+                    </label>
+                    <textarea 
+                        id="message" 
+                        name="message" 
+                        required 
+                        placeholder="Cuéntanos qué tienes en mente..."
+                        maxlength="1000"
+                    ></textarea>
+                    <div class="char-counter">
+                        <span id="char-count">0</span> / 1000 caracteres
+                    </div>
+                </div>
+
+                <div class="privacy-check">
+                    <input type="checkbox" id="privacy" name="privacy" required>
+                    <label for="privacy">
+                        Acepto que mi mensaje sea almacenado para poder responder. 
+                        No compartiremos tu información con terceros.
+                    </label>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submit-btn">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>Enviar Mensaje</span>
+                </button>
+            </form>
+
+            <!-- Estadísticas -->
+            
+
+            <!-- FAQ -->
+            <div class="faq-section">
+                <h3>Preguntas Frecuentes</h3>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>¿Cuánto tiempo tarda en responderse?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Revisamos todos los mensajes diariamente. Si requiere respuesta, 
+                        te contactaremos en menos de 48 horas al correo proporcionado.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>¿Puedo enviar varios mensajes?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        ¡Por supuesto! No hay límite. Si tienes múltiples sugerencias o reportes, 
+                        puedes enviar un mensaje por cada tema para mejor organización.
+                    </div>
+                </div>
+
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>¿Implementan todas las sugerencias?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Evaluamos cada sugerencia cuidadosamente. Aunque no podamos implementar todo, 
+                        cada idea nos ayuda a mejorar y priorizar el desarrollo de la plataforma.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Exceso de Luz</p>
+            <p class="verse">"Que la comunicación de vuestra fe sea eficaz" — Filemón 1:6</p>
+        </div>
+    </footer>
+
+    <script src="exceso_de_luz.js"></script>
+
+    <!-- Firebase -->
+    <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp, query, where, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyARYSgelNGVVpOryuq0Z3YCZxoqYA8TUns",
+  authDomain: "exceso-de-luz.firebaseapp.com",
+  projectId: "exceso-de-luz",
+  storageBucket: "exceso-de-luz.firebasestorage.app",
+  messagingSenderId: "442481525938",
+  appId: "1:442481525938:web:e72a2672a589e594aeb5ab",
+  measurementId: "G-GLTKTGY2GG"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Cargar estadísticas
+async function loadStats() {
+  try {
+    const messagesRef = collection(db, 'mensajes');
+    
+    // Total de mensajes
+    const totalSnapshot = await getCountFromServer(messagesRef);
+    document.getElementById('total-messages').textContent = totalSnapshot.data().count;
+    
+    // Total de sugerencias
+    const suggestionsQuery = query(messagesRef, where('categoria', '==', 'sugerencia'));
+    const suggestionsSnapshot = await getCountFromServer(suggestionsQuery);
+    document.getElementById('total-suggestions').textContent = suggestionsSnapshot.data().count;
+    
+    // Total de testimonios
+    const testimoniesQuery = query(messagesRef, where('categoria', '==', 'testimonio'));
+    const testimoniesSnapshot = await getCountFromServer(testimoniesQuery);
+    document.getElementById('total-testimonies').textContent = testimoniesSnapshot.data().count;
+    
+  } catch (error) {
+    console.error('Error cargando stats:', error);
+  }
+}
+
+// Enviar mensaje
+window.submitContactForm = async function(formData) {
+  try {
+    const messagesRef = collection(db, 'mensajes');
+    
+    await addDoc(messagesRef, {
+    nombre: formData.name,
+    categoria: formData.category,
+    mensaje: formData.message,
+    timestamp: serverTimestamp(),
+    leido: false,
+    userAgent: navigator.userAgent,
+    idioma: navigator.language
+});
+    
+    return { success: true };
+  } catch (error) {
+    console.error('Error enviando mensaje:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+// Cargar stats al inicio
+loadStats();
+
+console.log('🔥 Firebase mensajería ready');
+    </script>
+
+    <script>
+// ═══════════════════════════════════════════════════════
+// MANEJO DEL FORMULARIO
+// ═══════════════════════════════════════════════════════
+
+// Seleccionar categoría
+document.querySelectorAll('.category-option').forEach(option => {
+    option.addEventListener('click', () => {
+        document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
+        option.classList.add('selected');
+    });
+});
+
+// Marcar la primera como seleccionada por defecto
+document.querySelector('.category-option').classList.add('selected');
+
+// Contador de caracteres
+const messageField = document.getElementById('message');
+const charCount = document.getElementById('char-count');
+const charCounter = messageField.closest('.form-group').querySelector('.char-counter');
+
+messageField.addEventListener('input', () => {
+    const count = messageField.value.length;
+    charCount.textContent = count;
+    
+    if (count > 950) {
+        charCounter.classList.add('warning');
+    } else {
+        charCounter.classList.remove('warning');
+    }
+});
+
+// FAQ Toggle
+document.querySelectorAll('.faq-item').forEach(item => {
+    item.addEventListener('click', () => {
+        const wasActive = item.classList.contains('active');
+        
+        // Cerrar todos
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+        
+        // Abrir el clickeado si no estaba activo
+        if (!wasActive) {
+            item.classList.add('active');
+        }
+    });
+});
+
+// Envío del formulario
+const form = document.getElementById('contact-form');
+const submitBtn = document.getElementById('submit-btn');
+const formMessage = document.getElementById('form-message');
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Validaciones básicas
+    // Validaciones básicas
+const name = document.getElementById('name').value.trim() || 'Anónimo';
+const message = document.getElementById('message').value.trim();
+const privacy = document.getElementById('privacy').checked;
+const category = document.querySelector('input[name="category"]:checked').value;
+
+if (!message || !privacy) {
+    showMessage('Por favor completa el mensaje y acepta la política de privacidad', 'error');
+    return;
+}
+
+if (message.length < 10) {
+    showMessage('El mensaje debe tener al menos 10 caracteres', 'error');
+    return;
+}
+    
+    // Deshabilitar botón y mostrar loading
+    submitBtn.disabled = true;
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<div class="spinner"></div><span>Enviando...</span>';
+    
+    try {
+        // Enviar a Firebase
+        const result = await window.submitContactForm({
+            name,
+            message,
+            category
+        });
+        
+        if (result.success) {
+            showMessage('¡Mensaje enviado con éxito! Gracias por contactarnos 🎉', 'success');
+            form.reset();
+            
+            // Reseleccionar primera categoría
+            document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
+            document.querySelector('.category-option').classList.add('selected');
+            document.querySelector('input[name="category"]').checked = true;
+            
+            // Actualizar contador
+            charCount.textContent = '0';
+            charCounter.classList.remove('warning');
+            
+            // Recargar estadísticas
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+            
+        } else {
+            showMessage('Error al enviar el mensaje. Por favor intenta de nuevo.', 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showMessage('Error al enviar el mensaje. Por favor intenta de nuevo.', 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+    }
+});
+
+function showMessage(text, type) {
+    formMessage.className = `form-message ${type} show`;
+    formMessage.innerHTML = `
+        <i class="fa-solid fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+        <span>${text}</span>
+    `;
+    
+    // Scroll to message
+    formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    
+    // Auto-hide después de 5 segundos
+    setTimeout(() => {
+        formMessage.classList.remove('show');
+    }, 5000);
+}
+
+// Inicializar
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof iniciarScrollHeader === 'function') {
+        iniciarScrollHeader();
+    }
+});
+    </script>
+</body>
+</html>

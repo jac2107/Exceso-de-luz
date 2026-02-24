@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicaciones - Exceso de Luz</title>
+    <link rel="stylesheet" href="exceso_de_luz.css">
+    <style>
+        /* ── Botón flotante "Volver" ── */
+        .home-minimal {
+            position: fixed;
+            top: 18px; left: 18px;
+            font-size: 0.85rem; font-weight: 500;
+            color: rgba(0,0,0,0.85);
+            text-decoration: none;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(6px);
+            padding: 8px 14px;
+            border-radius: 999px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+            opacity: 0; pointer-events: none;
+            transform: translateY(-6px);
+            transition: opacity .25s ease, transform .25s ease, box-shadow .25s ease;
+            z-index: 999;
+        }
+        .home-minimal.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+        .home-minimal:hover { background: rgba(255,248,235,0.95); box-shadow: 0 10px 24px rgba(0,0,0,0.18); }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html" style="text-decoration:none;">
+                    <h1>✨ Exceso de Luz</h1>
+                    <p class="tagline">Ilumina tu camino espiritual</p>
+                </a>
+            </div>
+            <a href="index.html" class="btn-back">← Volver al Inicio</a>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main-container">
+        <div class="container">
+            <div class="page-header">
+                <div class="page-icon">📱</div>
+                <h2>Aplicaciones y Páginas Cristianas</h2>
+                <p>Herramientas digitales para acompañarte en tu vida espiritual</p>
+            </div>
+            <div class="resource-grid" id="apps-grid"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Exceso de Luz. Todos los derechos reservados.</p>
+            <p class="verse">"Ustedes son la luz del mundo" — Mateo 5:14 NVI</p>
+        </div>
+    </footer>
+
+    <!-- Botón flotante -->
+    <a href="index.html" class="home-minimal" aria-label="Volver al inicio">🡰 Volver</a>
+
+    <!-- JS compartido (ProgresoManager, crearRecursoItem, renderizarGrid, etc.) -->
+    <script src="exceso_de_luz.js"></script>
+
+    <!-- ── Datos y lógica PROPIOS de esta página ── -->
+    <script>
+    const appsData = [
+        {
+            id: 'app-1',
+            titulo: 'YouVersion Bible',
+            imagen: 'https://play-lh.googleusercontent.com/NM89S-plLb6ZwByiP5DYp1U4vys2YNZKvM20nsU6C6AMiGDjInZGUey807O9Pj2_hy_h=w480-h960-rw',
+            descripcion: `
+                • Múltiples traducciones de la Biblia.<br>
+                • Planes bíblicos por temas y por tiempo.<br>
+                • Audio Biblia para escuchar la Palabra.<br>
+                • Devocionales diarios y videos.<br>
+                • Resalta versículos y agrega notas.
+            `,
+            url: 'https://play.google.com/store/apps/details?id=com.sirma.mobile.bible.android'
+        },
+        {
+            id: 'app-2',
+            titulo: 'Conecta †',
+            imagen: 'https://conecta-mas.vercel.app/_next/image?url=%2Flogo.png&w=1920&q=75',
+            descripcion: `
+                • Devocionales enfocados en luchas reales (pecado, ansiedad, fe).<br>
+                • Comunidad cristiana para hacer preguntas y recibir apoyo.<br>
+                • Ayuda bíblica y espacios de oración.<br>
+                • Juegos y trivia bíblica para aprender de forma interactiva.
+            `,
+            url: 'https://conecta-mas.vercel.app'
+        },
+        {
+            id: 'app-3',
+            titulo: 'Proyecto Biblia',
+            imagen: 'https://static.bibleproject.com/bp-web-components/v0.24.0/bibleproject-logo-mark.svg',
+            descripcion: `
+                • Videos y pódcast que explican la Biblia de forma clara.<br>
+                • Planes de lectura para estudiar la Biblia día a día.<br>
+                • Historias bíblicas animadas que conectan con la vida real.<br>
+                • Explicaciones claras paso a paso.
+            `,
+            url: 'https://proyectobiblia.com'
+        },
+        {
+            id: 'app-4',
+            titulo: 'Enduring Word Commentary',
+            imagen: 'https://play-lh.googleusercontent.com/p-OZjnluu7WYkNr9f6iwGo7zQmhMYtXtWZ0RjE97v1HC85ll2AydJa_KwIu5GSHRvA=s96',
+            descripcion: `
+                • Comentario bíblico versículo por versículo.<br>
+                • Explicaciones claras y profundas de toda la Biblia.<br>
+                • Enfoque en el significado original del texto.<br>
+                • Referencias cruzadas y contexto histórico.
+            `,
+            url: 'https://play.google.com/store/apps/details?id=com.enduringword.commentary&hl=es_PE'
+        },
+        {
+            id: 'app-5',
+            titulo: 'The Chosen',
+            imagen: 'https://play-lh.googleusercontent.com/zrlRcV1WjjWWM9TVZS1oxOTCPwlReFC2UhNBNANEDDxFcJh6l59cIz4S66GYoHILzAET=s96-rw',
+            descripcion: `
+                • Serie sobre la vida de Jesús desde la perspectiva de sus discípulos.<br>
+                • Episodios completos gratuitos dentro de la app.<br>
+                • Audio y subtítulos en español.<br>
+                • Ideal para profundizar en el contexto humano del Evangelio.
+            `,
+            url: 'https://play.google.com/store/apps/details?id=net.comeandsee.thechosen'
+        },
+        {
+            id: 'app-6',
+            titulo: 'Bible Chat',
+            imagen: 'https://play-lh.googleusercontent.com/tYO_1XG0dKDbXpOT7M4zwqxM4YxVXAVZuhUQr13-HInAUNg6t7f_9rygn_erED30rMs=w480-h960-rw',
+            descripcion: `
+                • Chat interactivo para hacer preguntas sobre la Biblia.<br>
+                • Respuestas basadas en la Escritura y contexto bíblico.<br>
+                • Ayuda a entender pasajes difíciles de forma inmediata.<br>
+                • Interfaz tipo conversación, simple y directa.
+            `,
+            url: 'https://play.google.com/store/apps/details?id=com.basmo.BibleChat&hl=es_PE'
+        },
+        {
+            id: 'app-7',
+            titulo: 'Echo Prayer',
+            imagen: 'https://play-lh.googleusercontent.com/3H9RfWhCr2R2G3Vgf3q0WU2TYd5P4shvTzMGbD6pb7zHwwv1JhybdKIGdofKNo_b-20=s96-rw',
+            descripcion: `
+                • Registro y organización de peticiones de oración.<br>
+                • Recordatorios para orar por tus temas importantes.<br>
+                • Categorías: familia, iglesia, salud, etc.<br>
+                • Posibilidad de marcar respuestas y agradecimientos.
+            `,
+            url: 'https://play.google.com/store/search?q=echo+prayer+app'
+        },
+        {
+            id: 'app-8',
+            titulo: 'Bible Tracker',
+            imagen: 'https://play-lh.googleusercontent.com/tgxiq-v8ER6Rtg1bvD7DDN_AcNrgcnF2ISGZTU0YbPQIe5tRw6LWglLCxyePF1d8dA=w480-h960-rw',
+            descripcion: `
+                • Rastreador visual para marcar capítulos y libros leídos.<br>
+                • Progreso claro por libro y por toda la Biblia.<br>
+                • Múltiples trackers personalizables.<br>
+                • Diseño simple y sin distracciones.
+            `,
+            url: 'https://play.google.com/store/apps/details?id=com.biblereadingprogresstracker.BibleTracker&hl=es_PE'
+        },
+        {
+            id: 'app-9',
+            titulo: 'Coalición por el Evangelio',
+            imagen: 'https://www.coalicionporelevangelio.org/wp-content/uploads/2021/06/logo-coalicion.png',
+            descripcion: `
+                • Artículos sobre doctrina, vida cristiana, familia y cultura.<br>
+                • Teología reformada sólida centrada en el evangelio.<br>
+                • Recursos multiformato: escritos, videos y contenido en redes.<br>
+                • Materiales para creyentes y líderes hispanohablantes.
+            `,
+            url: 'https://www.coalicionporelevangelio.org'
+        },
+        {
+            id: 'app-10',
+            titulo: 'BIBLIATODO',
+            imagen: 'https://play-lh.googleusercontent.com/FqNjKRzbmWvLDuZBTfqvH1OyIJbFngN_Tkd5IcwPJt94lCNBl015ZpAnp7eHCIqK3CE=w480-h960-rw',
+            descripcion: `
+                • Biblia interlineal (texto original hebreo y griego).<br>
+                • Diccionario bíblico con definiciones y referencias.<br>
+                • Concordancia y comparación de versiones.<br>
+                • Amplia biblioteca de versiones e idiomas.
+            `,
+            url: 'https://play.google.com/store/apps/details?id=dfj.developer.bibliatodo'
+        },
+        {
+            id: 'app-11',
+            titulo: 'Glorify',
+            imagen: 'https://play-lh.googleusercontent.com/XBFAVyMo61ov67K0JzX0cWnP6sWcunDH9D6CrkCeAhbNCnmvgn81s6XvgN5cBMR5hmA=w480-h960',
+            descripcion: `
+                • Oraciones y meditaciones cristianas paso a paso.<br>
+                • Música y sonidos para conectar con Dios.<br>
+                • Devocionales diarios para mantener una rutina espiritual.
+            `,
+            url: 'https://play.google.com/store/apps/details?id=com.glorify.app&hl=es_PE'
+        }
+    ];
+
+    // Función para mezclar array (Fisher-Yates)
+    function mezclar(arr) {
+        const copia = [...arr];
+        
+        return copia;
+    }
+
+    // Renderizar con ordenamiento: no completadas primero (mezcladas), completadas al final (mezcladas)
+    function renderizarGridOrdenado() {
+        const grid = document.getElementById('apps-grid');
+        if (!grid) return;
+        
+        // Separar completadas y no completadas
+        const noCompletadas = appsData.filter(app => !progresoManager.estaCompletado(app.id));
+        const completadas = appsData.filter(app => progresoManager.estaCompletado(app.id));
+        
+        // Mezclar ambos grupos
+        const noCompletadasMezcladas = mezclar(noCompletadas);
+        const completadasMezcladas = mezclar(completadas);
+        
+        // Juntar: no completadas primero, completadas al final
+        const ordenadas = [...noCompletadasMezcladas, ...completadasMezcladas];
+        
+        // Renderizar
+        grid.innerHTML = '';
+        ordenadas.forEach(app => grid.appendChild(crearRecursoItem(app, 'aplicaciones')));
+    }
+
+    // Renderizar usando función del JS general
+    document.addEventListener('DOMContentLoaded', () => {
+        // Guardar conteo de aplicaciones disponibles
+        if (typeof guardarConteoCategoria === 'function') {
+            guardarConteoCategoria('aplicaciones', appsData.length);
+        }
+        renderizarGridOrdenado(); // Usar la nueva función
+        iniciarScrollHeader();
+        
+        // Re-renderizar cuando se marca/desmarca
+        document.addEventListener('click', (e) => {
+            if (e.target.type === 'checkbox' && e.target.closest('#apps-grid')) {
+                setTimeout(() => renderizarGridOrdenado(), 100);
+            }
+        });
+    });
+    </script>
+
+</body>
+</html>
