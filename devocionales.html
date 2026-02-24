@@ -277,13 +277,13 @@
         /* Duración del plan */
         .devotional-duration {
             position: absolute;
-            top: 12px;
-            left: 12px;
-            padding: 0.5rem 0.9rem;
+            top: 6px;
+            left: 6px;
+            padding: 0.3rem 0.3rem;
             background: rgba(0,0,0,0.85);
             color: white;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 0.6rem;
             font-weight: 700;
             display: flex;
             align-items: center;
@@ -293,7 +293,7 @@
         }
 
         .devotional-duration i {
-            font-size: 0.9rem;
+            font-size: 0.7rem;
         }
 
         /* Categoría */
@@ -301,11 +301,11 @@
             position: absolute;
             top: 12px;
             right: 12px;
-            padding: 0.4rem 0.8rem;
+            padding: 0.4rem 0.1rem;
             background: rgba(255,255,255,0.95);
             color: var(--primary-color);
             border-radius: 20px;
-            font-size: 0.7rem;
+            font-size: 0.5rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -315,21 +315,21 @@
         /* Stats */
         .devotional-stats {
             position: absolute;
-            bottom: 12px;
-            right: 12px;
+            bottom: 6px;
+            right: 6px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 5px;
             background: rgba(0,0,0,0.75);
             padding: 6px 10px;
             border-radius: 12px;
-            font-size: 11px;
+            font-size: 8px;
             z-index: 10;
         }
 
         .devotional-stats i {
-            font-size: 12px;
-            color: #ffd700;
+            font-size: 10px;
+            color: #ffffff;
         }
 
         .devotional-stat-number {
@@ -391,6 +391,7 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            
         }
 
         .btn-go {
@@ -611,11 +612,425 @@
                 margin: 1rem;
                 padding: 1.5rem;
             }
-
-            .devotional-actions {
-                flex-direction: column;
-            }
+ 
         }
+        /* ==========================
+   GRID RESPONSIVE (libros / devocionales)
+   ========================== */
+
+.resource-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(4, 1fr); /* desktop amplio por defecto */
+  align-items: start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* columnas según breakpoints */
+@media (max-width: 1200px) {
+  .resource-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 900px) {
+  .resource-grid { grid-template-columns: repeat(2, 1fr); } /* 2 columnas en tablets */
+}
+@media (max-width: 520px) {
+  .resource-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+}
+
+/* Asegura comportamiento consistente para ambas tarjetas */
+.book-card,
+.devotional-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 340px;
+  box-sizing: border-box;
+  position: relative; /* para overlays/badges */
+}
+
+/* Contenedores de portada (mapeo para book/devotional) */
+.book-cover-wrapper,
+.devotional-image {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+/* Info siempre en pie para mantener acciones alineadas */
+.book-info,
+.devotional-info {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+/* ajustes internos comunes */
+.book-title, .devotional-title { margin-bottom: 0.5rem; }
+.book-synopsis, .devotional-synopsis { margin-bottom: 1rem; }
+.book-btn, .devotional-btn { white-space: nowrap; }
+
+/* portada: ensure cover works nicely */
+.book-cover-art,
+.devotional-image img {
+  background-size: cover;
+  background-position: center center;
+  border-radius: 8px;
+}
+
+/* Stats pequeños responsive */
+.book-stats, .devotional-stats { font-size: 12px; padding: 6px 8px; }
+.book-stat-number, .devotional-stat-number { font-size: 11px; }
+
+/* Tarjeta completada: estilo opcional */
+.book-card.completed,
+.devotional-card.completed {
+  filter: grayscale(40%) brightness(0.92);
+}
+.book-card.completed::after,
+.devotional-card.completed::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  pointer-events: none;
+  background: rgba(0,0,0,0.16);
+}
+
+/* ==========================
+   PANEL DE FILTROS (ocultar en scroll + botón)
+   ========================== */
+
+/* Mantén sticky; se ocultará con la clase .hidden */
+.books-controls,
+.devotional-controls {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: transform .32s cubic-bezier(.22,.9,.32,1), opacity .28s ease;
+  will-change: transform, opacity;
+}
+
+/* clase aplicada por scroll para esconder */
+.books-controls.hidden,
+.devotional-controls.hidden {
+  transform: translateY(-120%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* clase forzada por toggle del botón para mostrar manualmente */
+.books-controls.shown-manual,
+.devotional-controls.shown-manual {
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  animation: slideDownFade 320ms cubic-bezier(.22,.9,.32,1) both;
+}
+
+/* evita que filtros ocupen toda la pantalla en móvil */
+@media (max-width: 520px) {
+  .filter-menu { max-height: 50vh; }
+  .filter-section { gap: .5rem; }
+  .filter-dropdown { min-width: 140px; }
+}
+
+/* ==========================
+   BOTONES FLOTANTES (filtros + back-to-top)
+   ========================== */
+
+.filters-toggle {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 1200;
+  display: none;
+  align-items: center;
+  gap: .6rem;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: none;
+  padding: 10px 12px;
+  border-radius: 999px;
+  box-shadow: 0 8px 28px rgba(8,12,20,0.12);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+/* mostrar el botón en pantallas < 900px */
+@media (max-width: 900px) {
+  .filters-toggle { display: inline-flex; }
+  main .container { padding-top: 0.5rem; } /* espacio cuando el panel está oculto */
+}
+
+/* Back to top */
+.back-to-top {
+  position: fixed;
+  right: 18px;
+  bottom: 82px;
+  z-index: 1300;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: none;
+  padding: 10px 10px;
+  border-radius: 999px;
+  box-shadow: 0 10px 28px rgba(8,12,20,0.12);
+  cursor: pointer;
+  font-weight: 700;
+  transform: translateY(8px) scale(.98);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform .28s ease, opacity .28s ease;
+}
+.back-to-top.visible {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+@media (max-width: 420px) {
+  .back-to-top { right: 12px; bottom: 70px; padding: 8px 14px; font-size: 1.05rem; }
+  .filters-toggle { right: 12px; bottom: 18px; }
+}
+.filters-toggle:focus, .back-to-top:focus {
+  outline: 3px solid rgba(0,0,0,0.07);
+  outline-offset: 3px;
+}
+
+/* ==========================
+   ANIMACIONES (slide)
+   ========================== */
+@keyframes slideDownFade {
+  from { transform: translateY(-14px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+@keyframes slideUpFade {
+  from { transform: translateY(0); opacity: 1; }
+  to   { transform: translateY(-14px); opacity: 0; }
+}
+
+/* ==========================
+   AJUSTES FINALES DE RESPONSIVE
+   ========================== */
+@media (max-width: 520px) {
+  .resource-grid { grid-template-columns: repeat(2, 1fr); gap: 0.7rem; }
+  .book-cover-wrapper { padding-top: 160%; }
+  .book-3d { width: 90%; height: 88%; }
+  .devotional-image { padding-top: 72%; } /* imagen más vertical si es devocional */
+}/* ==========================
+   GRID RESPONSIVE (libros / devocionales)
+   ========================== */
+
+.resource-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(4, 1fr); /* desktop amplio por defecto */
+  align-items: start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* columnas según breakpoints */
+@media (max-width: 1200px) {
+  .resource-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 900px) {
+  .resource-grid { grid-template-columns: repeat(2, 1fr); } /* 2 columnas en tablets */
+}
+@media (max-width: 520px) {
+  .resource-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+}
+
+/* Asegura comportamiento consistente para ambas tarjetas */
+.book-card,
+.devotional-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 340px;
+  box-sizing: border-box;
+  position: relative; /* para overlays/badges */
+}
+
+/* Contenedores de portada (mapeo para book/devotional) */
+.book-cover-wrapper,
+.devotional-image {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+/* Info siempre en pie para mantener acciones alineadas */
+.book-info,
+.devotional-info {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+/* ajustes internos comunes */
+.book-title, .devotional-title { margin-bottom: 0.5rem; }
+.book-synopsis, .devotional-synopsis { margin-bottom: 1rem; }
+.book-btn, .devotional-btn { white-space: nowrap; }
+
+/* portada: ensure cover works nicely */
+.book-cover-art,
+.devotional-image img {
+  background-size: cover;
+  background-position: center center;
+  border-radius: 8px;
+}
+
+/* Stats pequeños responsive */
+.book-stats, .devotional-stats { font-size: 12px; padding: 6px 8px; }
+.book-stat-number, .devotional-stat-number { font-size: 11px; }
+
+/* Tarjeta completada: estilo opcional */
+.book-card.completed,
+.devotional-card.completed {
+  filter: grayscale(40%) brightness(0.92);
+}
+.book-card.completed::after,
+.devotional-card.completed::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  pointer-events: none;
+  background: rgba(0,0,0,0.16);
+}
+
+/* ==========================
+   PANEL DE FILTROS (ocultar en scroll + botón)
+   ========================== */
+
+/* Mantén sticky; se ocultará con la clase .hidden */
+.books-controls,
+.devotional-controls {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: transform .32s cubic-bezier(.22,.9,.32,1), opacity .28s ease;
+  will-change: transform, opacity;
+}
+
+/* clase aplicada por scroll para esconder */
+.books-controls.hidden,
+.devotional-controls.hidden {
+  transform: translateY(-120%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* clase forzada por toggle del botón para mostrar manualmente */
+.books-controls.shown-manual,
+.devotional-controls.shown-manual {
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  animation: slideDownFade 320ms cubic-bezier(.22,.9,.32,1) both;
+}
+
+/* evita que filtros ocupen toda la pantalla en móvil */
+@media (max-width: 520px) {
+  .filter-menu { max-height: 50vh; }
+  .filter-section { gap: .5rem; }
+  .filter-dropdown { min-width: 140px; }
+}
+
+/* ==========================
+   BOTONES FLOTANTES (filtros + back-to-top)
+   ========================== */
+
+.filters-toggle {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 1200;
+  display: none;
+  align-items: center;
+  gap: .6rem;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: none;
+  padding: 10px 12px;
+  border-radius: 999px;
+  box-shadow: 0 8px 28px rgba(8,12,20,0.12);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+/* mostrar el botón en pantallas < 900px */
+@media (max-width: 900px) {
+  .filters-toggle { display: inline-flex; }
+  main .container { padding-top: 0.5rem; } /* espacio cuando el panel está oculto */
+}
+
+/* Back to top */
+.back-to-top {
+  position: fixed;
+  right: 18px;
+  bottom: 82px;
+  z-index: 1300;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: none;
+  padding: 10px 10px;
+  border-radius: 999px;
+  box-shadow: 0 10px 28px rgba(8,12,20,0.12);
+  cursor: pointer;
+  font-weight: 700;
+  transform: translateY(8px) scale(.98);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform .28s ease, opacity .28s ease;
+}
+.back-to-top.visible {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+@media (max-width: 420px) {
+  .back-to-top { right: 12px; bottom: 70px; padding: 8px 14px; font-size: 1.05rem; }
+  .filters-toggle { right: 12px; bottom: 18px; }
+}
+.filters-toggle:focus, .back-to-top:focus {
+  outline: 3px solid rgba(0,0,0,0.07);
+  outline-offset: 3px;
+}
+
+/* ==========================
+   ANIMACIONES (slide)
+   ========================== */
+@keyframes slideDownFade {
+  from { transform: translateY(-14px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+@keyframes slideUpFade {
+  from { transform: translateY(0); opacity: 1; }
+  to   { transform: translateY(-14px); opacity: 0; }
+}
+
+/* ==========================
+   AJUSTES FINALES DE RESPONSIVE
+   ========================== */
+@media (max-width: 520px) {
+  .resource-grid { grid-template-columns: repeat(2, 1fr); gap: 0.7rem; }
+  .book-cover-wrapper { padding-top: 160%; }
+  .book-3d { width: 90%; height: 88%; }
+  .devotional-image { padding-top: 72%; } /* imagen más vertical si es devocional */
+}
     </style>
 </head>
 <body>
@@ -686,8 +1101,7 @@
             <p class="verse">"Lámpara es a mis pies tu palabra" — Salmos 119:105</p>
         </div>
     </footer>
-    <a href="index.html" class="home-minimal" aria-label="Volver al inicio">🡰 Volver</a>
-
+    
     <script src="exceso_de_luz.js"></script>
     <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -1021,7 +1435,6 @@ function crear(devocional) {
                 <span>${devocional.duracion}</span>
             </div>
             
-            <div class="devotional-category">${devocional.categoria}</div>
             
             <div class="devotional-stats">
                 <i class="fa-solid fa-play-circle"></i>
@@ -1037,17 +1450,17 @@ function crear(devocional) {
             
             <div class="devotional-actions">
                 <a href="${devocional.link}" target="_blank" class="devotional-btn btn-go" data-id="${devocional.id}">
-                    <i class="fa-solid fa-external-link-alt"></i> Ir al Plan
+                    <i class="fa-solid fa-external-link-alt"></i> 
                 </a>
                 <button class="devotional-btn btn-info-dev" data-id="${devocional.id}">
-                    <i class="fa-solid fa-info-circle"></i> Detalles
+                    <i class="fa-solid fa-info-circle"></i> 
                 </button>
             </div>
             
             <div class="checkbox-wrapper-devotional">
                 <input type="checkbox" id="${devocional.id}" ${completado ? 'checked' : ''}>
                 <label for="${devocional.id}">
-                    ${completado ? '✓ Completado' : 'Marcar como completado'}
+                    ${completado ? '✓ Completado' : 'Completado'}
                 </label>
             </div>
         </div>
@@ -1373,5 +1786,99 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof iniciarScrollHeader === 'function') iniciarScrollHeader();
 });
     </script>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  /* ==============================
+     SELECTORES (auto detecta libros o devocionales)
+     ============================== */
+
+  const filtersPanel =
+    document.querySelector(".books-controls") ||
+    document.querySelector(".devotional-controls");
+
+  if (!filtersPanel) return;
+
+  const grid =
+    document.querySelector(".resource-grid");
+
+  /* ==============================
+     CREAR BOTÓN TOGGLE FILTROS
+     ============================== */
+
+  const filtersToggle = document.createElement("button");
+  filtersToggle.className = "filters-toggle";
+  filtersToggle.innerHTML = '🔍︎';
+  document.body.appendChild(filtersToggle);
+
+  /* ==============================
+     CREAR BOTÓN BACK TO TOP
+     ============================== */
+
+  const backToTop = document.createElement("button");
+  backToTop.className = "back-to-top";
+  backToTop.innerHTML = '⬆';
+  document.body.appendChild(backToTop);
+
+  /* ==============================
+     ESTADO SCROLL
+     ============================== */
+
+  let lastScroll = window.scrollY;
+  let manualOpen = false;
+
+  window.addEventListener("scroll", function () {
+    const currentScroll = window.scrollY;
+
+    // Mostrar botón back-to-top
+    if (currentScroll > 300) {
+      backToTop.classList.add("visible");
+    } else {
+      backToTop.classList.remove("visible");
+    }
+
+    // Si fue abierto manualmente, no lo ocultes por scroll
+    if (manualOpen) return;
+
+    // Scroll hacia abajo → ocultar
+    if (currentScroll > lastScroll && currentScroll > 120) {
+      filtersPanel.classList.add("hidden");
+    }
+    // Scroll hacia arriba → mostrar
+    else {
+      filtersPanel.classList.remove("hidden");
+    }
+
+    lastScroll = currentScroll;
+  });
+
+  /* ==============================
+     TOGGLE MANUAL FILTROS
+     ============================== */
+
+  filtersToggle.addEventListener("click", function () {
+    manualOpen = !manualOpen;
+
+    if (manualOpen) {
+      filtersPanel.classList.remove("hidden");
+      filtersPanel.classList.add("shown-manual");
+    } else {
+      filtersPanel.classList.remove("shown-manual");
+    }
+  });
+
+  /* ==============================
+     BACK TO TOP
+     ============================== */
+
+  backToTop.addEventListener("click", function () {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  });
+
+});
+</script>
 </body>
 </html>

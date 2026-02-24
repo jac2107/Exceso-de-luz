@@ -340,7 +340,7 @@
         /* Stats mini en la portada */
         .book-stats {
             position: absolute;
-            top: 12px;
+            bottom: 12px;
             right: 12px;
             display: flex;
             align-items: center;
@@ -363,17 +363,17 @@
 
         /* Tema/categoría */
         .book-theme {
-            position: absolute;
+            position:fixed;
             top: 12px;
-            left: 12px;
-            padding: 0.4rem 0.8rem;
+            left: 6px;
+            padding: 0.1rem 0.8rem;
             background: rgba(255,255,255,0.9);
             color: var(--primary-color);
             border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 700;
+            font-size: 0.5rem;
+            font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.2px;
             z-index: 10;
         }
 
@@ -946,6 +946,206 @@
 /* aseguramos que las páginas interiores no aparezcan (si preferís ocultarlas por seguridad) */
 .book-pages-container { opacity: 0 !important; pointer-events: none !important; }
 .book-front-cover { opacity: 0 !important; pointer-events: none !important; }
+/* --- GRID RESPONSIVE para los libros --- */
+.resource-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(4, 1fr); /* desktop amplio por defecto */
+  align-items: start;
+}
+
+/* columnas según breakpoints */
+@media (max-width: 1200px) {
+  .resource-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 900px) {
+  .resource-grid { grid-template-columns: repeat(2, 1fr); } /* ESPECIAL: 2 columnas en tablets/móviles anchos */
+}
+@media (max-width: 520px) {
+  .resource-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; } /* aún 2 columnas si el usuario pide */
+  .book-cover-wrapper { padding-top: 160%; } /* portada un poco más vertical en pantallas pequeñas */
+  .book-3d { width: 90%; height: 88%; }
+}
+
+/* Asegura que cada tarjeta tenga el mismo comportamiento interno y no "rompa" */
+.book-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 360px;
+  box-sizing: border-box;
+}
+
+.book-cover-wrapper {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+/* info debajo siempre alineada al final */
+.book-info {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Ajustes para que elementos no se desplacen al reducir */
+.book-title { margin-bottom: 0.5rem; }
+.book-synopsis { margin-bottom: 1rem; }
+
+/* Stats pequeños responsive */
+.book-stats { font-size: 12px; padding: 6px 8px; }
+.book-stat-number { font-size: 11px; }
+
+/* --- PANEL DE FILTROS: ocultar en scroll + botón para mostrar --- */
+.books-controls {
+  position: sticky; /* lo mantienes sticky */
+  top: 0;
+  transition: transform .32s cubic-bezier(.22,.9,.32,1), opacity .28s ease;
+  will-change: transform, opacity;
+}
+
+/* clase aplicada por scroll para esconder */
+.books-controls.hidden {
+  transform: translateY(-120%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* clase forcéada por el toggle del botón para mostrar manualmente */
+.books-controls.shown-manual {
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* BOTÓN FLOTANTE para mostrar/ocultar filtros (aparece en pantallas pequeñas) */
+.filters-toggle {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 1200;
+  display: none; /* se muestra solo en móvil */
+  align-items: center;
+  gap: .6rem;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: none;
+  padding: 10px 12px;
+  border-radius: 999px;
+  box-shadow: 0 8px 28px rgba(8,12,20,0.12);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+/* mostrar el botón en pantallas < 900px */
+@media (max-width: 900px) {
+  .filters-toggle { display: inline-flex; }
+  /* como el panel se esconde, da un pequeño padding-top al grid para que no quede pegado */
+  main .container { padding-top: 0.5rem; }
+}
+
+/* Mejora en la distribución interna de la portada y la imagen */
+.book-cover-art {
+  background-size: cover;
+  background-position: center center;
+  border-radius: 8px;
+}
+
+/* Evitar que elementos "salten" al cambiar tamaño */
+.book-btn { white-space: nowrap; }
+
+/* Opcional: si quieres un borde / espacio consistente en tarjetas completadas */
+.book-card.completed {
+  filter: grayscale(40%) brightness(0.92);
+}
+.book-card.completed::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  pointer-events: none;
+  background: rgba(0,0,0,0.16);
+}
+
+/* Evita que los menús de filtros ocupen toda la pantalla en móvil */
+@media (max-width: 520px) {
+  .filter-menu { max-height: 50vh; }
+  .filter-section { gap: .5rem; }
+  .filter-dropdown { min-width: 140px; }
+}
+/* ===== Animación show/hide para panel de filtros ===== */
+@keyframes slideDownFade {
+  from { transform: translateY(-14px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+@keyframes slideUpFade {
+  from { transform: translateY(0); opacity: 1; }
+  to   { transform: translateY(-14px); opacity: 0; }
+}
+
+/* Cuando se fuerza mostrar manualmente (botón) — animación de entrada */
+.books-controls.shown-manual {
+  animation: slideDownFade 320ms cubic-bezier(.22,.9,.32,1) both;
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Cuando se oculta por scroll (clase hidden) — animación de salida */
+.books-controls.hidden {
+  animation: slideUpFade 260ms ease both;
+  pointer-events: none;
+}
+
+/* Si quieres que la transición sea también suave al aparecer por scroll-up, no forzado */
+.books-controls:not(.hidden):not(.shown-manual) {
+  transition: transform .32s cubic-bezier(.22,.9,.32,1), opacity .28s ease;
+}
+
+/* ===== Back to top button ===== */
+.back-to-top {
+  position: fixed;
+  right: 18px;
+  bottom: 82px; /* por encima del botón de filtros (18px) */
+  z-index: 1300;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: none;
+  padding: 10px 10px;
+  border-radius: 999px;
+  box-shadow: 0 10px 28px rgba(8,12,20,0.12);
+  cursor: pointer;
+  font-weight: 700;
+  transform: translateY(8px) scale(.98);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform .28s ease, opacity .28s ease;
+}
+
+/* estado visible */
+.back-to-top.visible {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* pequeños estilos responsivos para no obstruir en pantalla chica */
+@media (max-width: 420px) {
+  .back-to-top { right: 12px; bottom: 70px; padding: 8px 14px; font-size: 1.05rem; }
+  .filters-toggle { right: 12px; bottom: 18px; }
+}
+
+/* accesibilidad: foco */
+.filters-toggle:focus, .back-to-top:focus {
+  outline: 3px solid rgba(0,0,0,0.07);
+  outline-offset: 3px;
+}
     </style>
     
 </head>
@@ -1017,7 +1217,6 @@
             <p class="verse">"Lámpara es a mis pies tu palabra" — Salmos 119:105</p>
         </div>
     </footer>
-<a href="index.html" class="home-minimal" aria-label="Volver al inicio">🡰 Volver</a>
 r
     <script src="exceso_de_luz.js"></script>
     <script type="module">
@@ -1340,17 +1539,17 @@ function crear(libro) {
 
             <div class="book-actions">
                 <button class="book-btn btn-download" data-id="${libro.id}">
-                    <i class="fa-solid fa-download"></i> Ir Drive
+                    <i class="fa-solid fa-download"></i> 
                 </button>
                 <button class="book-btn btn-info" data-id="${libro.id}">
-                    <i class="fa-solid fa-circle-info"></i> Leer más
+                    <i class="fa-solid fa-circle-info"></i> 
                 </button>
             </div>
 
             <div class="checkbox-wrapper-book">
                 <input type="checkbox" id="${libro.id}" ${completado ? 'checked' : ''}>
                 <label for="${libro.id}">
-                    ${completado ? '✓ Leído' : 'Marcar como leído'}
+                    ${completado ? '✓ Leído' : 'Leído'}
                 </label>
             </div>
         </div>
@@ -1686,5 +1885,121 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof iniciarScrollHeader === 'function') iniciarScrollHeader();
 });
     </script>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const header = document.querySelector('.books-controls');
+  if (!header) return;
+
+  // --- FILTERS TOGGLE (no recreate if ya existe) ---
+  let filtersBtn = document.querySelector('.filters-toggle');
+  if (!filtersBtn) {
+    filtersBtn = document.createElement('button');
+    filtersBtn.className = 'filters-toggle';
+    filtersBtn.type = 'button';
+    filtersBtn.setAttribute('aria-controls', 'autor-menu');
+    filtersBtn.setAttribute('aria-expanded', 'false');
+    filtersBtn.title = 'Mostrar u ocultar filtros';
+    filtersBtn.textContent = '🔍︎';
+    document.body.appendChild(filtersBtn);
+  }
+
+  // --- BACK TO TOP (no recreate) ---
+  let backBtn = document.querySelector('.back-to-top');
+  if (!backBtn) {
+    backBtn = document.createElement('button');
+    backBtn.className = 'back-to-top';
+    backBtn.type = 'button';
+    backBtn.title = 'Ir arriba';
+    backBtn.innerHTML = '⬆';
+    document.body.appendChild(backBtn);
+  }
+
+  // Estado inicial
+  if (window.innerWidth <= 900) {
+    header.classList.add('hidden'); // inicia oculto en pantallas pequenas
+  }
+
+  // Toggle manual de filtros
+  filtersBtn.addEventListener('click', () => {
+    const isShown = header.classList.toggle('shown-manual');
+    // si lo mostramos manualmente, quitar hidden y poner aria-expanded
+    if (isShown) {
+      header.classList.remove('hidden');
+      filtersBtn.setAttribute('aria-expanded', 'true');
+      // Scroll suave al header para verlo (en móvil)
+      header.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      header.classList.add('hidden');
+      filtersBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Back to top click (también quita el panel forzado si está abierto)
+  backBtn.addEventListener('click', () => {
+    // si está en modo mostrado manual, cerramos para mejor UX
+    if (header.classList.contains('shown-manual')) header.classList.remove('shown-manual');
+    // animación scroll
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Scroll handler: esconder al hacer scroll down, mostrar al subir
+  let lastY = window.scrollY;
+  let ticking = false;
+  const SHOW_THRESHOLD = 140;   // px desde top para considerar mostrar/ocultar
+  const BACK_BTN_THRESHOLD = 360; // show back-to-top after this px
+
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+
+    // Back to top show/hide
+    if (y > BACK_BTN_THRESHOLD) {
+      backBtn.classList.add('visible');
+    } else {
+      backBtn.classList.remove('visible');
+    }
+
+    // Si el usuario forzó el panel (shown-manual), no aplicamos hide automático
+    if (header.classList.contains('shown-manual')) {
+      lastY = y;
+      return;
+    }
+
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const delta = y - lastY;
+        // Scroll down (ocultar)
+        if (delta > 10 && y > SHOW_THRESHOLD) {
+          if (!header.classList.contains('hidden')) {
+            header.classList.remove('shown-manual');
+            header.classList.add('hidden');
+          }
+        }
+        // Scroll up (mostrar)
+        else if (delta < -10 || y < SHOW_THRESHOLD) {
+          if (header.classList.contains('hidden')) {
+            header.classList.remove('hidden');
+            // small animation will play due to .books-controls:not(.hidden) transition or .shown-manual rules
+          }
+        }
+        lastY = y;
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // Si la ventana se redimensiona: en desktop quitar hidden/forced
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 900) {
+      header.classList.remove('hidden');
+      header.classList.remove('shown-manual');
+    } else {
+      // en mobile dejamos el comportamiento: inicia hidden
+      // no forzar nada si ya el usuario abrió manualmente
+      if (!header.classList.contains('shown-manual')) header.classList.add('hidden');
+    }
+  });
+});
+</script>
 </body>
 </html>
