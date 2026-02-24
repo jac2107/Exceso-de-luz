@@ -14,18 +14,18 @@
 /* cajita blanca pequeña, fija arriba-derecha */
 .stats {
   position: absolute;
-  top: 12px;
-  right: 20px;
+  bottom: 6px;
+  right: 6px;
 
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
 
   background: #d7ccc8;
   padding: 4px 8px;
   border-radius: 15px;
 
-  font-size: 17px;
+  font-size: 10px;
   z-index: 30;
 }
 
@@ -39,7 +39,7 @@
 
 /* icono pequeño */
 .stat-item i {
-  font-size: 17px;   /* tamaño del icono */
+  font-size: 10px;   /* tamaño del icono */
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -302,14 +302,14 @@
 
         .wallpaper-category {
             position: absolute;
-            top: 12px;
-            left: 12px;
-            padding: 0.4rem 0.8rem;
+            top: 6px;
+            left: 6px;
+            padding: 0.2rem 0.2rem;
             background: rgba(0,0,0,0.7);
             backdrop-filter: blur(10px);
             color: white;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 8px;
             font-weight: 600;
             text-transform: uppercase;
             z-index: 2;
@@ -770,9 +770,6 @@
         <button class="grid-btn active" data-cols="4" title="4 columnas">
             <i class="fa-solid fa-grip"></i>
         </button>
-        <button class="grid-btn" data-cols="5" title="5 columnas">
-            <i class="fa-solid fa-table-cells"></i>
-        </button>
     </div>
 
     <!-- Selector de ordenamiento -->
@@ -910,7 +907,7 @@ function crear(fondo) {
         <div class="checkbox-wrapper-wallpaper">
             <input type="checkbox" id="${fondo.id}" ${completado ? 'checked' : ''}>
             <label for="${fondo.id}">
-                ${completado ? '✓ Guardado' : 'Marcar como guardado'}
+                ${completado ? '✓ Guardado' : 'Visto'}
             </label>
         </div>
     </div>`;
