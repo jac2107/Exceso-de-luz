@@ -31,14 +31,12 @@
 .music-stats{
    position: absolute;
   top: 12px;
-  right: 288px;
-
+  right: 28px;
   display: flex;
   align-items: center;
   gap: 10px;
-
   background: #d7ccc8;
-  padding: 4px 8px;
+  padding: 4px 4px;
   border-radius: 15px;
 
   font-size: 20px;
@@ -783,202 +781,12 @@
     }
 }
 
-/* MÓVILES PEQUEÑOS (max-width: 480px) */
-@media (max-width: 480px) {
-    /* Controles ultra compactos */
-    .music-controls {
-        padding: 0.8rem;
-    }
-    
-    .search-box input {
-        font-size: 0.85rem;
-        padding: 0.7rem 2.5rem 0.7rem 0.9rem;
-    }
-    
-    /* Grid buttons en fila horizontal */
-    .filter-section {
-        gap: 0.6rem;
-    }
-    
-    .grid-btn {
-        width: 35px;
-        height: 35px;
-        padding: 4px;
-    }
-    
-    .grid-btn i {
-        font-size: 12px;
-    }
-    
-    /* Stats aún más pequeñas */
-    .music-stats {
-        top: 6px;
-        right: 6px;
-        padding: 2px 5px;
-        gap: 4px;
-        border-radius: 10px;
-    }
-    
-    .stat-item i {
-        font-size: 12px;
-    }
-    
-    .stat-number {
-        font-size: 9px;
-    }
-    
-    /* Tarjetas más compactas */
-    .song-info {
-        padding: 0.8rem;
-    }
-    
-    .song-title {
-        font-size: 0.9rem;
-    }
-    
-    .song-artist {
-        font-size: 0.75rem;
-    }
-    
-    .song-genre {
-        font-size: 0.6rem;
-        padding: 0.25rem 0.6rem;
-        margin-bottom: 0.8rem;
-    }
-    
-    .song-actions {
-        gap: 0.5rem;
-    }
-    
-    .song-btn {
-        font-size: 0.7rem;
-        padding: 0.55rem 0.3rem;
-    }
-    
-    /* Checkbox */
-    .checkbox-wrapper {
-        margin-top: 1rem;
-        padding-top: 1rem;
-        gap: 0.6rem;
-    }
-    
-    .checkbox-wrapper input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-    }
-    
-    .checkbox-wrapper label {
-        font-size: 0.8rem;
-    }
-    
-    /* Badge completado más pequeño */
-    .completed-badge {
-        width: 30px;
-        height: 30px;
-        font-size: 1rem;
-        top: 8px;
-        right: 8px;
-    }
-    
-    /* Selector ordenamiento */
-    .sort-select {
-        font-size: 0.8rem;
-        padding: 0.55rem 2rem 0.55rem 0.7rem;
-    }
-    
-    /* Chips más pequeños */
-    .filter-chip {
-        font-size: 0.7rem;
-        padding: 0.3rem 0.6rem;
-    }
-    
-    .filter-chip-close {
-        width: 16px;
-        height: 16px;
-        font-size: 0.7rem;
-    }
-}
 
-/* LANDSCAPE MODE (orientación horizontal en móviles) */
-@media (max-height: 500px) and (orientation: landscape) {
-    .music-controls {
-        position: relative;
-        top: 0;
-    }
-    
-    .song-card:hover {
-        transform: translateY(-4px) scale(1.01);
-    }
-}
 
-/* AJUSTES PARA STATS EN MÓVIL (posición responsive) */
-@media (max-width: 640px) {
-    .music-stats {
-        position: absolute;
-        top: 6px;
-        right: 6px;
-        left: auto;
-    }
-}
-
-/* GRID COLUMNS RESPONSIVE */
-/* ═══════════════════════════════════════════════════════
-   GRID AUTOMÁTICO RESPONSIVE (sin JS)
-   ═══════════════════════════════════════════════════════ */
-
-#musica-grid {
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    /* ↑ Automático: crea columnas de mínimo 280px */
-}
-
-/* Solo aplicar grid fijo cuando el usuario YA eligió columnas */
-#musica-grid[data-user-choice] {
-    grid-template-columns: var(--user-grid-columns);
-}
-
-/* Responsive para grid automático (solo si NO hay elección del usuario) */
-@media (max-width: 1400px) {
-    #musica-grid:not([data-user-choice]) {
-        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    }
-}
-
-@media (max-width: 1200px) {
-    #musica-grid:not([data-user-choice]) {
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    }
-}
-
-@media (max-width: 768px) {
-    #musica-grid:not([data-user-choice]) {
-        grid-template-columns: repeat(2, 1fr);
-        /* En móvil: SIEMPRE 2 columnas */
-    }
-}
-
-@media (max-width: 480px) {
-    #musica-grid:not([data-user-choice]) {
-        grid-template-columns: repeat(1, 1fr);
-        /* En móvil pequeño: SIEMPRE 1 columna */
-    }
-}
-
-/* Cuando el usuario elige columnas, mantenerlas en responsive */
-@media (max-width: 768px) {
-    #musica-grid[data-user-choice="5"],
-    #musica-grid[data-user-choice="4"],
-    #musica-grid[data-user-choice="3"] {
-        grid-template-columns: repeat(2, 1fr) !important;
-        /* Máximo 2 columnas en móvil */
-    }
-}
 
 @media (max-width: 480px) {
     #musica-grid[data-user-choice] {
-        grid-template-columns: repeat(1, 1fr) !important;
-        /* Máximo 1 columna en móvil pequeño */
+        grid-template-columns: repeat(2, 2fr) !important;
     }
 }
 /* ══════ FORZAR BOTONES EN LÍNEA ══════ */
@@ -1122,6 +930,196 @@
         width: 100%;
     }
 }
+/* Back to top */
+.back-to-top {
+  position: fixed;
+  right: 18px;
+  bottom: 82px;
+  z-index: 1300;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: none;
+  padding: 10px 10px;
+  border-radius: 999px;
+  box-shadow: 0 10px 28px rgba(8,12,20,0.12);
+  cursor: pointer;
+  font-weight: 700;
+  transform: translateY(8px) scale(.98);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform .28s ease, opacity .28s ease;
+}
+.back-to-top.visible {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+@media (max-width: 420px) {
+  .back-to-top { right: 12px; bottom: 70px; padding: 8px 14px; font-size: 1.05rem; }
+  .filters-toggle { right: 12px; bottom: 18px; }
+}
+.filters-toggle:focus, .back-to-top:focus {
+  outline: 3px solid rgba(0,0,0,0.07);
+  outline-offset: 3px;
+}
+
+/* ==========================
+   ANIMACIONES (slide)
+   ========================== */
+@keyframes slideDownFade {
+  from { transform: translateY(-14px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+@keyframes slideUpFade {
+  from { transform: translateY(0); opacity: 1; }
+  to   { transform: translateY(-14px); opacity: 0; }
+}
+/* ══════════════════════════════════════════════════════
+   BOTONES FLOTANTES Y ANIMACIÓN SCROLL
+   ══════════════════════════════════════════════════════ */
+
+/* Toggle de filtros (flotante inferior derecha) */
+.filters-toggle {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 999;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+}
+
+.filters-toggle.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+    background-color: #fffbfb;
+}
+
+.filters-toggle:hover {
+    background: var(--color-marron);
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+.filters-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Back to top (flotante arriba del toggle) */
+.back-to-top {
+    position: fixed;
+    right: 18px;
+    bottom: 82px;
+    z-index: 999;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+.back-to-top:active {
+    transform: translateY(0);
+}
+
+/* Animación de la barra de controles */
+.music-controls {
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.music-controls.hidden {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.music-controls.shown-manual {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+/* Responsive para botones flotantes */
+@media (max-width: 768px) {
+    .filters-toggle,
+    .back-to-top {
+        width: 50px;
+        height: 50px;
+        font-size: 1.3rem;
+    }
+
+    .filters-toggle {
+        bottom: 16px;
+        right: 16px;
+    }
+
+    .back-to-top {
+        bottom: 76px;
+        right: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .filters-toggle,
+    .back-to-top {
+        width: 48px;
+        height: 48px;
+        font-size: 1.2rem;
+    }
+
+    .filters-toggle {
+        bottom: 14px;
+        right: 14px;
+    }
+
+    .back-to-top {
+        bottom: 72px;
+        right: 14px;
+    }
+}
     </style>
 </head>
 <body>
@@ -1170,19 +1168,6 @@
         <div class="filter-menu" id="artista-menu">
             <!-- Se genera dinámicamente -->
         </div>
-    </div>
-
-    <!-- ✅ CONTROLES AGRUPADOS EN UN CONTENEDOR -->
-    <div style="display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0;">
-        <button class="grid-btn" data-cols="3" title="3 columnas">
-            <i class="fa-solid fa-grip-lines"></i>
-        </button>
-        <button class="grid-btn active" data-cols="4" title="4 columnas">
-            <i class="fa-solid fa-grip"></i>
-        </button>
-        <button class="grid-btn" data-cols="5" title="5 columnas">
-            <i class="fa-solid fa-table-cells"></i>
-        </button>
     </div>
 
     <!-- Selector de ordenamiento -->
@@ -1335,7 +1320,7 @@ function crear(s) {
         </div>
         <div class="checkbox-wrapper">
             <input type="checkbox" id="${s.id}" ${completado?'checked':''}>
-            <label for="${s.id}">${completado?'✓ Escuchada':'Marcar como escuchada'}</label>
+            <label for="${s.id}">${completado?'✓ Escuchada':'Escuchada'}</label>
         </div>
     </div>
 </div>`;
@@ -1811,6 +1796,101 @@ window.syncStatsToDomFromCache = function(visibleSongList) {
 
 console.log('🔥 Firebase music stats ready');
 </script>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
 
+  /* ══════════════════════════════════════════════════════
+     BOTONES FLOTANTES Y OCULTAR BUSCADOR AL SCROLL
+     ══════════════════════════════════════════════════════ */
+
+  const filtersPanel = document.querySelector(".music-controls");
+  const filtersToggle = document.createElement("button");
+  const backToTop = document.createElement("button");
+
+  if (!filtersPanel) return;
+
+  // Crear botón toggle filtros
+  filtersToggle.className = "filters-toggle";
+  filtersToggle.innerHTML = '🔍';
+  filtersToggle.setAttribute('aria-label', 'Mostrar filtros');
+  document.body.appendChild(filtersToggle);
+
+  // Crear botón back to top
+  backToTop.className = "back-to-top";
+  backToTop.innerHTML = '⬆';
+  backToTop.setAttribute('aria-label', 'Volver arriba');
+  document.body.appendChild(backToTop);
+
+  let lastScroll = 0;
+  let manualOpen = false;
+
+  // Mostrar botones después de hacer scroll
+  window.addEventListener("scroll", function () {
+    const currentScroll = window.scrollY;
+
+    // Mostrar botón back-to-top después de 300px
+    if (currentScroll > 300) {
+      backToTop.classList.add("visible");
+    } else {
+      backToTop.classList.remove("visible");
+    }
+
+    // Mostrar botón de filtros después de 120px
+    if (currentScroll > 120) {
+      filtersToggle.classList.add("visible");
+    } else {
+      filtersToggle.classList.remove("visible");
+    }
+
+    // Si fue abierto manualmente, no ocultar
+    if (manualOpen) {
+      lastScroll = currentScroll;
+      return;
+    }
+
+    // Scroll hacia abajo → ocultar filtros
+    if (currentScroll > lastScroll && currentScroll > 120) {
+      filtersPanel.classList.add("hidden");
+    }
+    // Scroll hacia arriba → mostrar filtros
+    else if (currentScroll < lastScroll) {
+      filtersPanel.classList.remove("hidden");
+    }
+
+    lastScroll = currentScroll;
+  });
+
+  // Toggle manual de filtros
+  filtersToggle.addEventListener("click", function () {
+    manualOpen = !manualOpen;
+
+    if (manualOpen) {
+      filtersPanel.classList.remove("hidden");
+      filtersPanel.classList.add("shown-manual");
+    } else {
+      filtersPanel.classList.remove("shown-manual");
+      // Volver al comportamiento normal de scroll
+      if (window.scrollY > 120) {
+        filtersPanel.classList.add("hidden");
+      }
+    }
+  });
+
+  // Back to top
+  backToTop.addEventListener("click", function () {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+    
+    // Al volver arriba, restablecer estado
+    manualOpen = false;
+    filtersPanel.classList.remove("hidden", "shown-manual");
+    filtersToggle.classList.remove("visible");
+    backToTop.classList.remove("visible");
+  });
+
+});
+</script>
 </body>
 </html>
