@@ -1856,16 +1856,23 @@ document.addEventListener("DOMContentLoaded", function () {
      TOGGLE MANUAL FILTROS
      ============================== */
 
-  filtersToggle.addEventListener("click", function () {
+filtersToggle.addEventListener("click", function () {
     manualOpen = !manualOpen;
 
     if (manualOpen) {
+      // Mostrar filtros manualmente
       filtersPanel.classList.remove("hidden");
       filtersPanel.classList.add("shown-manual");
     } else {
+      // Ocultar filtros manualmente
       filtersPanel.classList.remove("shown-manual");
+      
+      // Si estamos abajo, aplicar hidden inmediatamente
+      if (window.scrollY > 120) {
+        filtersPanel.classList.add("hidden");
+      }
     }
-  });
+});
 
   /* ==============================
      BACK TO TOP
